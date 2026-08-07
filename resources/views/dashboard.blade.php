@@ -301,39 +301,8 @@
     </div>
 
     <script>
+        // Keyboard shortcut: Ctrl+K focuses search
         document.addEventListener('DOMContentLoaded', function () {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            const toggle = document.getElementById('sidebarToggle');
-
-            function openSidebar() {
-                sidebar.classList.remove('-translate-x-full');
-                overlay.classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeSidebar() {
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
-                document.body.style.overflow = '';
-            }
-
-            if (toggle) {
-                toggle.addEventListener('click', function (e) {
-                    e.stopPropagation();
-                    if (sidebar.classList.contains('-translate-x-full')) {
-                        openSidebar();
-                    } else {
-                        closeSidebar();
-                    }
-                });
-            }
-
-            if (overlay) {
-                overlay.addEventListener('click', closeSidebar);
-            }
-
-            // Keyboard shortcut: Ctrl+K focuses search
             document.addEventListener('keydown', function (e) {
                 if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
                     e.preventDefault();

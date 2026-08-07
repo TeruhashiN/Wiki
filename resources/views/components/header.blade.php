@@ -38,17 +38,43 @@
             <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-slate-950"></span>
         </button>
 
-        {{-- Sign In button --}}
-        <a href="#" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 transition-all shadow-lg shadow-indigo-600/20">
+        {{-- Sign In / Account --}}
+        @auth('bloom')
+        @php
+            $bloomUser = auth('bloom')->user();
+        @endphp
+        <a href="#" class="hidden sm:inline-flex items-center gap-2.5 px-2 py-1.5 rounded-xl hover:bg-slate-800 transition-colors">
+            <div class="relative">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-sky-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold uppercase shadow-md shadow-indigo-500/30">
+                    {{ strtoupper(substr($bloomUser->username, 0, 2)) }}
+                </div>
+                <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-slate-950"></span>
+            </div>
+            <span class="hidden md:block text-left leading-tight">
+                <span class="block text-sm font-semibold text-white truncate max-w-[90px]">{{ $bloomUser->username }}</span>
+                <span class="block text-[10px] text-slate-500 capitalize">{{ $bloomUser->role }}</span>
+            </span>
+        </a>
+        @else
+        <a href="{{ route('login') }}" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 transition-all shadow-lg shadow-indigo-600/20">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"/>
             </svg>
             Sign In
         </a>
+        @endauth
 
         {{-- Avatar (mobile) --}}
-        <button class="sm:hidden w-9 h-9 rounded-full bg-gradient-to-br from-sky-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold shadow-md shadow-indigo-500/30" aria-label="Account">
-            BG
-        </button>
+        @auth('bloom')
+        <a href="{{ route('logout') }}" class="sm:hidden w-9 h-9 rounded-full bg-gradient-to-br from-sky-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold uppercase shadow-md shadow-indigo-500/30" aria-label="Logout">
+            {{ strtoupper(substr(auth('bloom')->user()->username, 0, 2)) }}
+        </a>
+        @else
+        <a href="{{ route('login') }}" class="sm:hidden w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 text-sm font-bold" aria-label="Login">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
+            </svg>
+        </a>
+        @endauth
     </div>
 </header>

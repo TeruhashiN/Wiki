@@ -10,3 +10,70 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* -------------------------------------------------------------------------- */
+/*  Profile dropdown                                                          */
+/* -------------------------------------------------------------------------- */
+
+/* Container – the menu is hidden by default and revealed via .dropdown-open */
+.dropdown .dropdown-menu {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+    transform-origin: bottom center;
+    pointer-events: none;
+    transition:
+        opacity 0.15s ease,
+        transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+        visibility 0s linear 0.18s;
+}
+
+.dropdown.dropdown-open .dropdown-menu {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+    transition:
+        opacity 0.2s ease,
+        transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+        visibility 0s;
+}
+
+/* Staggered cascade entrance for menu items */
+.dropdown-menu .dropdown-item {
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+        transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+        opacity 0.25s ease,
+        background-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.dropdown.dropdown-open .dropdown-menu .dropdown-item {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.dropdown.dropdown-open .dropdown-menu .dropdown-item:nth-child(1) { transition-delay: 0.04s; }
+.dropdown.dropdown-open .dropdown-menu .dropdown-item:nth-child(2) { transition-delay: 0.08s; }
+.dropdown.dropdown-open .dropdown-menu .dropdown-item:nth-child(3) { transition-delay: 0.12s; }
+.dropdown.dropdown-open .dropdown-menu .dropdown-item:nth-child(4) { transition-delay: 0.16s; }
+.dropdown.dropdown-open .dropdown-menu .dropdown-item:nth-child(5) { transition-delay: 0.20s; }
+
+/* Smooth close – collapse items quickly */
+.dropdown:not(.dropdown-open) .dropdown-menu .dropdown-item {
+    transition:
+        opacity 0.1s ease,
+        transform 0.1s ease;
+    transition-delay: 0s;
+}
+
+/* Chevron rotation */
+.dropdown-chevron {
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.dropdown.dropdown-open .dropdown-chevron {
+    transform: rotate(180deg);
+}
