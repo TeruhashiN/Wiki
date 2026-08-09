@@ -288,7 +288,7 @@
 
                 {{-- Footer --}}
                 <footer class="pt-4 border-t border-slate-800/70 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
-                    <p>© 2025 GameWiki — The Game Encyclopedia. Fan-made project.</p>
+                    <p>© 2026 GameWiki — The Game Encyclopedia. Fan-made project.</p>
                     <div class="flex items-center gap-4">
                         <a href="#" class="hover:text-slate-400 transition-colors">About</a>
                         <a href="#" class="hover:text-slate-400 transition-colors">Contact</a>
