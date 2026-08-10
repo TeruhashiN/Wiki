@@ -46,7 +46,7 @@
                 <section>
                     <button id="contentsToggle"
                         class="w-full flex items-center justify-between gap-3 mb-4 p-4 rounded-2xl border border-slate-800 bg-slate-900/50 hover:border-slate-600 transition-colors text-left"
-                        aria-expanded="true"
+                        aria-expanded="false"
                         aria-controls="contentsList">
                         <span class="flex items-center gap-2 text-lg font-bold text-white">
                             <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -56,14 +56,14 @@
                         </span>
                         <span class="flex items-center gap-3">
                             <span class="text-xs text-slate-500">{{ $categories->count() }} categories</span>
-                            <svg id="contentsChevron" class="w-5 h-5 text-slate-400 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <svg id="contentsChevron" class="w-5 h-5 text-slate-400 transition-transform duration-300" style="transform: rotate(-90deg);" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
                             </svg>
                         </span>
                     </button>
 
                     {{-- Category list (Wikipedia-style) --}}
-                    <div id="contentsList" class="rounded-2xl border border-slate-800 bg-slate-900/50 overflow-hidden">
+                    <div id="contentsList" class="hidden rounded-2xl border border-slate-800 bg-slate-900/50 overflow-hidden">
                         @forelse($categories as $index => $category)
                             <a href="#category-{{ $category->slug }}"
                                class="flex items-center gap-4 p-4 sm:p-5 hover:bg-slate-800/50 transition-colors group {{ $index > 0 ? 'border-t border-slate-800/70' : '' }}">
@@ -108,21 +108,34 @@
 
                         <div class="rounded-2xl border border-slate-800 bg-slate-900/50 p-6">
                             <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                @for($i = 1; $i <= 3; $i++)
+                                @php
+                                    $categoryUploads = $uploads->where('category_id', $category->id);
+                                @endphp
+                                @forelse($categoryUploads as $upload)
                                     <div class="rounded-xl border border-slate-800 bg-slate-950/40 p-4 hover:border-slate-600 transition-colors">
                                         <div class="flex items-center gap-3">
-                                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-600/40 to-purple-600/30 border border-indigo-500/30 flex items-center justify-center text-slate-300">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/>
-                                                </svg>
-                                            </div>
+                                            @if($upload->image)
+                                                <img src="{{ asset('storage/' . $upload->image) }}" alt="{{ $upload->name }}" class="w-10 h-10 shrink-0 rounded-lg object-cover border border-slate-700">
+                                            @else
+                                                <div class="w-10 h-10 shrink-0 rounded-lg bg-gradient-to-br from-indigo-600/40 to-purple-600/30 border border-indigo-500/30 flex items-center justify-center text-slate-300">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504 1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg>
+                                                </div>
+                                            @endif
                                             <div class="min-w-0">
-                                                <p class="text-sm font-bold text-white truncate">Sample {{ $category->name }} #{{ $i }}</p>
-                                                <p class="text-[11px] text-slate-500">Placeholder entry</p>
+                                                <p class="text-sm font-bold text-white truncate">{{ $upload->name }}</p>
+                                                <p class="text-[11px] text-slate-500">{{ $upload->description ? Str::limit($upload->description, 50) : 'No description' }}</p>
                                             </div>
                                         </div>
+                                        @if($upload->price)
+                                            <p class="mt-2 text-xs font-bold text-emerald-400">${{ number_format($upload->price, 2) }}</p>
+                                        @endif
                                     </div>
-                                @endfor
+                                @empty
+                                    <div class="col-span-full text-center py-8">
+                                        <p class="text-4xl mb-3">📦</p>
+                                        <p class="text-sm text-slate-400">No items uploaded yet in this category.</p>
+                                    </div>
+                                @endforelse
                             </div>
                         </div>
                     </section>

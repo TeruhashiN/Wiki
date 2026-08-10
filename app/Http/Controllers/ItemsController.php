@@ -13,9 +13,11 @@ class ItemsController extends Controller
     public function index(): View
     {
         $categories = WikiCategory::orderBy('sort_order')->get();
+        $uploads = Upload::with('category')->get();
 
         return view('components.items', [
             'categories' => $categories,
+            'uploads' => $uploads,
         ]);
     }
 
