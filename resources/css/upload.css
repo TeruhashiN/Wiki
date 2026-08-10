@@ -1,0 +1,26 @@
+.panel {
+    display: none;
+}
+.panel.open {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.action-btn {
+    transition: all 0.2s ease;
+}
+.action-btn:hover {
+    transform: translateY(-2px);
+}
+.action-btn:active {
+    transform: translateY(0);
+}

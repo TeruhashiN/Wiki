@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Upload extends Model
+{
+    protected $connection = 'bloom';
+
+    protected $table = 'uploads';
+
+    protected $fillable = [
+        'image',
+        'category_id',
+        'name',
+        'description',
+        'price',
+    ];
+
+    protected $casts = [
+        'price' => 'decimal:2',
+    ];
+
+    public function category()
+    {
+        return $this->belongsTo(WikiCategory::class, 'category_id');
+    }
+}
