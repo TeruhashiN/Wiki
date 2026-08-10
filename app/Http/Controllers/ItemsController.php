@@ -64,4 +64,24 @@ class ItemsController extends Controller
 
         return back()->with('status', 'Category added successfully.');
     }
+
+    public function show(string $slug): View
+    {
+        $category = WikiCategory::where('slug', $slug)->firstOrFail();
+        $uploads = Upload::where('category_id', $category->id)->get();
+
+        return view('items.category', [
+            'category' => $category,
+            'uploads' => $uploads,
+        ]);
+    }
+
+    public function showUpload(string $id): View
+    {
+        $upload = Upload::with('category')->findOrFail($id);
+
+        return view('items.show', [
+            'upload' => $upload,
+        ]);
+    }
 }
