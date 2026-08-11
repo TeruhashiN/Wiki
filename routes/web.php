@@ -14,6 +14,9 @@ Route::post('/items', [ItemsController::class, 'store'])->name('items.store');
 Route::post('/categories', [ItemsController::class, 'storeCategory'])->name('categories.store');
 Route::get('/categories/{slug}', [ItemsController::class, 'show'])->name('categories.show');
 Route::get('/uploads/{id}', [ItemsController::class, 'showUpload'])->name('uploads.show');
+Route::get('/uploads/{id}/edit', [ItemsController::class, 'edit'])->name('uploads.edit');
+Route::put('/uploads/{id}', [ItemsController::class, 'update'])->name('uploads.update');
+Route::delete('/uploads/{id}', [ItemsController::class, 'destroy'])->name('uploads.destroy');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');

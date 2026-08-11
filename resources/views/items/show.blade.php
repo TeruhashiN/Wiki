@@ -98,6 +98,28 @@
                         </div>
                     </aside>
                 </div>
+
+                {{-- Related items by alphabet --}}
+                @if(isset($groupedUploads) && $groupedUploads->count() > 0)
+                    <div class="mt-8">
+                        <h2 class="text-lg font-bold text-white mb-4">More in {{ $upload->category->name ?? 'this category' }}</h2>
+                        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            @foreach($groupedUploads as $letter => $items)
+                                <div class="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+                                    <h3 class="text-sm font-bold text-indigo-400 mb-3 uppercase tracking-wider">{{ $letter }}</h3>
+                                    <ul class="space-y-2">
+                                        @foreach($items as $index => $related)
+                                            <li class="flex items-center gap-2 text-xs">
+                                                <span class="w-5 h-5 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-400 shrink-0">{{ $index + 1 }}</span>
+                                                <a href="{{ route('uploads.show', $related->id) }}" class="text-slate-300 hover:text-white transition-colors truncate">{{ $related->name }}</a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
             </main>
         </div>
     </div>

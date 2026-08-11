@@ -27,7 +27,7 @@
                     </div>
 
                     {{-- Action Buttons --}}
-                    <div class="grid sm:grid-cols-2 gap-4 mb-8">
+                    <div class="grid sm:grid-cols-3 gap-4 mb-8">
                         <button type="button" id="btnCategory" class="action-btn group relative overflow-hidden rounded-2xl border-2 border-emerald-500/30 bg-slate-900/80 p-6 text-left hover:border-emerald-400 hover:shadow-xl hover:shadow-emerald-500/10">
                             <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             <div class="relative flex items-start gap-4">
@@ -53,6 +53,20 @@
                                     <p class="text-xs text-slate-400 leading-relaxed">Add a new item with image, details, and pricing.</p>
                                 </div>
                                 <svg class="w-5 h-5 shrink-0 text-indigo-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+                            </div>
+                        </button>
+
+                        <button type="button" id="btnManage" class="action-btn group relative overflow-hidden rounded-2xl border-2 border-amber-500/30 bg-slate-900/80 p-6 text-left hover:border-amber-400 hover:shadow-xl hover:shadow-amber-500/10">
+                            <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <div class="relative flex items-start gap-4">
+                                <div class="w-14 h-14 shrink-0 rounded-2xl bg-gradient-to-br from-amber-600 to-orange-600 flex items-center justify-center text-2xl shadow-lg shadow-amber-500/30 group-hover:scale-110 transition-transform">
+                                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/></svg>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="text-lg font-bold text-white mb-1">Manage Items</h3>
+                                    <p class="text-xs text-slate-400 leading-relaxed">Edit or delete existing uploads.</p>
+                                </div>
+                                <svg class="w-5 h-5 shrink-0 text-amber-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
                             </div>
                         </button>
                     </div>
@@ -106,6 +120,29 @@
                                     Add Category
                                 </button>
                             </form>
+                        </div>
+                    </div>
+
+                    {{-- Manage Items Panel --}}
+                    <div id="panelManage" class="panel">
+                        <div class="rounded-2xl border border-amber-500/30 bg-slate-900/50 p-6 shadow-lg shadow-amber-500/5">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-1 h-8 rounded-full bg-gradient-to-b from-amber-500 to-orange-500"></div>
+                                <div>
+                                    <h2 class="text-lg font-bold text-white">Manage Items</h2>
+                                    <p class="text-xs text-slate-500">Edit or delete existing uploads.</p>
+                                </div>
+                            </div>
+
+                            <form id="manageSearchForm" action="{{ route('items.upload') }}" method="GET" class="mb-4">
+                                <input type="hidden" name="panel" value="manage">
+                                <label class="block text-xs font-semibold text-slate-300 mb-2">Search</label>
+                                <input id="manageSearchInput" type="text" name="search" value="{{ $search ?? '' }}" placeholder="Search items..." class="w-full rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-200 p-3 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500/50">
+                            </form>
+
+                            <div id="manageItemsList" class="max-h-[360px] overflow-y-auto space-y-2 pr-1">
+                                @include('items.partials.manage-items', ['uploads' => $uploads])
+                            </div>
                         </div>
                     </div>
 
@@ -168,5 +205,24 @@
         </div>
     </div>
 
-</body>
-</html>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnCategory = document.getElementById('btnCategory');
+            const btnUpload = document.getElementById('btnUpload');
+            const btnManage = document.getElementById('btnManage');
+            const panelCategory = document.getElementById('panelCategory');
+            const panelUpload = document.getElementById('panelUpload');
+            const panelManage = document.getElementById('panelManage');
+
+            function openPanel(panel) {
+                panelCategory.classList.remove('open');
+                panelUpload.classList.remove('open');
+                panelManage.classList.remove('open');
+                panel.classList.add('open');
+            }
+
+            btnCategory.addEventListener('click', () => openPanel(panelCategory));
+            btnUpload.addEventListener('click', () => openPanel(panelUpload));
+            btnManage.addEventListener('click', () => openPanel(panelManage));
+        });
+    </script>
