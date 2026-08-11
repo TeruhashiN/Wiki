@@ -57,80 +57,73 @@
                     </button>
                     {{-- Category list (Wikipedia-style) --}}
                     <div id="contentsList" class="hidden rounded-2xl border border-slate-800 bg-slate-900/50 overflow-hidden">
-                        @forelse($categories as $index => $category)
-                            <a href="#category-{{ $category->slug }}"
-                               class="flex items-center gap-4 p-4 sm:p-5 hover:bg-slate-800/50 transition-colors group {{ $index > 0 ? 'border-t border-slate-800/70' : '' }}">
-                                <span class="w-11 h-11 shrink-0 rounded-xl border border-slate-700 bg-slate-800/80 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-                                    {{ $category->icon ?? '📁' }}
-                                </span>
-                                <span class="flex-1 min-w-0">
-                                    <span class="block text-sm sm:text-base font-bold text-white group-hover:text-indigo-300 transition-colors">{{ $category->name }}</span>
-                                    @if($category->description)
-                                        <span class="block text-xs text-slate-500 mt-0.5 truncate">{{ $category->description }}</span>
-                                    @endif
-                                </span>
-                                <span class="shrink-0 text-xs font-semibold text-slate-500 bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1">#{{ $category->sort_order }}</span>
-                                <svg class="w-4 h-4 shrink-0 text-slate-600 group-hover:text-indigo-400 group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
-                                </svg>
-                            </a>
-                        @empty
-                            <div class="p-10 text-center">
-                                <p class="text-4xl mb-3">🗂️</p>
-                                <p class="text-sm text-slate-400">No categories yet. Run the seeder to populate content.</p>
-                            </div>
-                        @endforelse
+                        <div class="grid grid-cols-2 gap-0 divide-x divide-slate-800">
+                            @forelse($categories as $category)
+                                <a href="#category-{{ $category->slug }}"
+                                   class="flex items-center gap-2 p-2.5 hover:bg-slate-800/50 transition-colors group {{ !$loop->first && $loop->odd ? 'border-l border-slate-800/70' : '' }}">
+                                    <span class="w-7 h-7 shrink-0 rounded-md border border-slate-700 bg-slate-800/80 flex items-center justify-center text-sm group-hover:scale-110 transition-transform">
+                                        {{ $category->icon ?? '📁' }}
+                                    </span>
+                                    <span class="flex-1 min-w-0">
+                                        <span class="block text-xs font-bold text-white group-hover:text-indigo-300 transition-colors truncate">{{ $category->name }}</span>
+                                    </span>
+                                    <svg class="w-3.5 h-3.5 shrink-0 text-slate-600 group-hover:text-indigo-400 group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
+                                    </svg>
+                                </a>
+                            @empty
+                                <div class="col-span-full p-6 text-center">
+                                    <p class="text-2xl mb-2">🗂️</p>
+                                    <p class="text-xs text-slate-400">No categories yet.</p>
+                                </div>
+                            @endforelse
+                        </div>
                     </div>
                 </section>
                 {{-- Category detail sections --}}
-                @foreach($categories as $category)
-                    <section id="category-{{ $category->slug }}" class="scroll-mt-24">
-                        <div class="flex items-center gap-3 mb-4">
-                            <span class="w-10 h-10 shrink-0 rounded-xl border border-slate-700 bg-slate-800/80 flex items-center justify-center text-xl">
-                                {{ $category->icon ?? '📁' }}
-                            </span>
-                            <div class="min-w-0">
-                                <h2 class="text-lg font-bold text-white">{{ $category->name }}</h2>
-                                @if($category->description)
-                                    <p class="text-xs text-slate-500">{{ $category->description }}</p>
-                                @endif
+                <div class="grid sm:grid-cols-2 gap-4">
+                    @foreach($categories as $category)
+                        @php
+                            $categoryUploads = $uploads->where('category_id', $category->id);
+                        @endphp
+                        <section id="category-{{ $category->slug }}" class="scroll-mt-24 rounded-2xl border border-slate-800 bg-slate-900/50 p-4 hover:border-slate-700 transition-colors">
+                            <div class="flex items-center gap-2.5 mb-3">
+                                <span class="w-8 h-8 shrink-0 rounded-lg border border-slate-700 bg-slate-800/80 flex items-center justify-center text-base">
+                                    {{ $category->icon ?? '📁' }}
+                                </span>
+                                <div class="min-w-0 flex-1">
+                                    <h3 class="text-sm font-bold text-white truncate">{{ $category->name }}</h3>
+                                </div>
+                                <a href="{{ route('categories.show', $category->slug) }}" class="text-[10px] font-semibold text-indigo-400 hover:text-indigo-300 transition-colors shrink-0">View All →</a>
                             </div>
-                            <a href="{{ route('categories.show', $category->slug) }}" class="ml-auto text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition-colors">View All →</a>
-                        </div>
-                        <div class="rounded-2xl border border-slate-800 bg-slate-900/50 p-6">
-                            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                @php
-                                    $categoryUploads = $uploads->where('category_id', $category->id);
-                                @endphp
-                                @forelse($categoryUploads as $upload)
-                                    <a href="{{ route('uploads.show', $upload->id) }}" class="rounded-xl border border-slate-800 bg-slate-950/40 p-4 hover:border-slate-600 transition-colors block">
-                                        <div class="flex items-center gap-3">
+                            <div class="grid grid-cols-2 gap-2">
+                                @forelse($categoryUploads->take(2) as $upload)
+                                    <a href="{{ route('uploads.show', $upload->id) }}" class="rounded-lg border border-slate-800 bg-slate-950/40 p-2.5 hover:border-slate-600 transition-colors block">
+                                        <div class="flex items-center gap-2">
                                             @if($upload->image)
-                                                <img src="{{ asset('storage/' . $upload->image) }}" alt="{{ $upload->name }}" class="w-10 h-10 shrink-0 rounded-lg object-cover border border-slate-700">
+                                                <img src="{{ asset('storage/' . $upload->image) }}" alt="{{ $upload->name }}" class="w-8 h-8 shrink-0 rounded-md object-cover border border-slate-700">
                                             @else
-                                                <div class="w-10 h-10 shrink-0 rounded-lg bg-gradient-to-br from-indigo-600/40 to-purple-600/30 border border-indigo-500/30 flex items-center justify-center text-slate-300">
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c.621 0 1.125.504 1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg>
+                                                <div class="w-8 h-8 shrink-0 rounded-md bg-gradient-to-br from-indigo-600/40 to-purple-600/30 border border-indigo-500/30 flex items-center justify-center text-slate-300">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c.621 0 1.125.504 1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg>
                                                 </div>
                                             @endif
                                             <div class="min-w-0">
-                                                <p class="text-sm font-bold text-white truncate group-hover:text-indigo-300 transition-colors">{{ $upload->name }}</p>
-                                                <p class="text-[11px] text-slate-500">{{ $upload->description ? Str::limit($upload->description, 50) : 'No description' }}</p>
+                                                <p class="text-xs font-bold text-white truncate group-hover:text-indigo-300 transition-colors">{{ $upload->name }}</p>
                                             </div>
                                         </div>
                                         @if($upload->price)
-                                            <p class="mt-2 text-xs font-bold text-emerald-400">${{ number_format($upload->price, 2) }}</p>
+                                            <p class="mt-1 text-[10px] font-bold text-emerald-400">${{ number_format($upload->price, 2) }}</p>
                                         @endif
                                     </a>
                                 @empty
-                                    <div class="col-span-full text-center py-8">
-                                        <p class="text-4xl mb-3">📦</p>
-                                        <p class="text-sm text-slate-400">No items uploaded yet in this category.</p>
+                                    <div class="col-span-2 text-center py-4">
+                                        <p class="text-xs text-slate-500">No items uploaded yet.</p>
                                     </div>
                                 @endforelse
                             </div>
-                        </div>
-                    </section>
-                @endforeach
+                        </section>
+                    @endforeach
+                </div>
                 {{-- Footer --}}
                 <footer class="pt-4 border-t border-slate-800/70 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
                     <p>© 2026 BloomCity Wiki — The Game Encyclopedia. Fan-made project.</p>

@@ -92,10 +92,6 @@
                                             <td class="py-2 text-slate-500 font-semibold">Price</td>
                                             <td class="py-2 text-slate-200">{{ $upload->price ? '$' . number_format($upload->price, 2) : '—' }}</td>
                                         </tr>
-                                        <tr>
-                                            <td class="py-2 text-slate-500 font-semibold">Description</td>
-                                            <td class="py-2 text-slate-200">{{ $upload->description ?: '—' }}</td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

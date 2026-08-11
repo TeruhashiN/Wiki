@@ -23,6 +23,8 @@ class ItemsController extends Controller
 
     public function create(): View
     {
+        $this->ensureAdmin();
+
         $categories = WikiCategory::orderBy('sort_order')->get();
 
         return view('items.upload', [
@@ -32,6 +34,8 @@ class ItemsController extends Controller
 
     public function store(): RedirectResponse
     {
+        $this->ensureAdmin();
+
         $validated = request()->validate([
             'image' => ['nullable', 'image', 'max:2048'],
             'category_id' => ['required', 'exists:bloom.wiki_categories,id'],
@@ -52,6 +56,8 @@ class ItemsController extends Controller
 
     public function storeCategory(): RedirectResponse
     {
+        $this->ensureAdmin();
+
         $validated = request()->validate([
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255', 'unique:bloom.wiki_categories,slug'],
@@ -65,10 +71,19 @@ class ItemsController extends Controller
         return back()->with('status', 'Category added successfully.');
     }
 
+    private function ensureAdmin(): void
+    {
+        $user = auth('bloom')->user();
+
+        if (!$user || $user->role !== 'admin') {
+            abort(403);
+        }
+    }
+
     public function show(string $slug): View
     {
         $category = WikiCategory::where('slug', $slug)->firstOrFail();
-        $uploads = Upload::where('category_id', $category->id)->get();
+        $uploads = Upload::where('category_id', $category->id)->orderBy('name')->get();
 
         return view('items.category', [
             'category' => $category,

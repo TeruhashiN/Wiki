@@ -22,14 +22,6 @@
         {{-- Main Navigation --}}
         <nav class="space-y-1">
             <p class="px-3 mb-2 text-[11px] font-semibold uppercase tracking-widest text-slate-500">Main Menu</p>
-
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 transition-colors group">
-                <svg class="w-5 h-5 text-slate-400 group-hover:text-indigo-400 transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75"/>
-                </svg>
-                Home
-            </a>
-
             @php
                 $isDashboard = request()->routeIs('dashboard');
                 $isItems = request()->routeIs('items');
@@ -39,10 +31,7 @@
                 <svg class="w-5 h-5 {{ $isDashboard ? 'text-indigo-400' : 'text-slate-400 group-hover:text-indigo-400 transition-colors' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 6.878V6a2.25 2.25 0 012.25-2.25h7.5A2.25 2.25 0 0118 6v.878m-12 0c.235-.083.487-.128.75-.128h10.5c.263 0 .515.045.75.128m-12 0A2.25 2.25 0 004.5 9v.878m13.5-3A2.25 2.25 0 0119.5 9v.878m0 0a2.246 2.246 0 00-.75-.128H5.25c-.263 0-.515.045-.75.128m15 0A2.25 2.25 0 0121 12v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6c0-1.036.7-1.93 1.5-2.122"/>
                 </svg>
-                Dashboard
-                @if($isDashboard)
-                    <span class="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300">ACTIVE</span>
-                @endif
+                Home
             </a>
 
             <a href="{{ route('items') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium {{ $isItems ? 'text-white bg-gradient-to-r from-indigo-600/40 to-purple-600/30 border border-indigo-500/30' : 'text-slate-300 hover:text-white hover:bg-slate-800/70 transition-colors group' }}">
@@ -50,9 +39,6 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 5.625c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"/>
                 </svg>
                 Items
-                @if($isItems)
-                    <span class="ml-auto text-xs font-bold text-indigo-300">{{ $categories->count() ?? '' }}</span>
-                @endif
             </a>
 
             <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 transition-colors group">
