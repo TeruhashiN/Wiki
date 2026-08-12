@@ -6,7 +6,6 @@ use App\Models\Upload;
 use App\Models\WikiCategory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Illuminate\Support\Str;
 
 class ItemsController extends Controller
 {
@@ -30,7 +29,7 @@ class ItemsController extends Controller
         $uploadsQuery = Upload::with('category')->orderBy('name');
 
         if ($search) {
-            $uploadsQuery->where('name', 'like', '%' . $search . '%');
+            $uploadsQuery->where('name', 'like', '%'.$search.'%');
         }
 
         $uploads = $uploadsQuery->paginate(10)->withQueryString();
@@ -52,20 +51,22 @@ class ItemsController extends Controller
     {
         $this->ensureAdmin();
 
-        $validated = request()->validate([
-            'image' => ['nullable', 'image', 'max:2048'],
-            'category_id' => ['required', 'exists:bloom.wiki_categories,id'],
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string', 'max:2000'],
-            'price' => ['nullable', 'numeric', 'min:0'],
-        ]);
+        $validated = request()->validate(array_merge($this->itemRules(), $this->seedRules()));
+
+        $seedData = $validated['seed'] ?? [];
 
         if (request()->hasFile('image')) {
             $path = request()->file('image')->store('uploads', 'public');
             $validated['image'] = $path;
         }
 
-        Upload::create($validated);
+        unset($validated['seed']);
+
+        $upload = Upload::create($validated);
+
+        if ($this->isSeedsCategory($validated['category_id'])) {
+            $upload->seed()->create($seedData);
+        }
 
         return back()->with('status', 'Item uploaded successfully.');
     }
@@ -91,9 +92,38 @@ class ItemsController extends Controller
     {
         $user = auth('bloom')->user();
 
-        if (!$user || $user->role !== 'admin') {
+        if (! $user || $user->role !== 'admin') {
             abort(403);
         }
+    }
+
+    private function itemRules(): array
+    {
+        return [
+            'image' => ['nullable', 'image', 'max:2048'],
+            'category_id' => ['required', 'exists:bloom.wiki_categories,id'],
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:2000'],
+            'price' => ['nullable', 'numeric', 'min:0'],
+        ];
+    }
+
+    private function seedRules(): array
+    {
+        return [
+            'seed.grow_time' => ['nullable', 'string', 'max:255'],
+            'seed.issue_count' => ['nullable', 'integer', 'min:0'],
+            'seed.issue_duration' => ['nullable', 'string', 'max:255'],
+            'seed.quality' => ['nullable', 'string', 'max:255'],
+            'seed.merit_event' => ['nullable', 'string', 'max:255'],
+        ];
+    }
+
+    private function isSeedsCategory(int $categoryId): bool
+    {
+        $slug = WikiCategory::where('id', $categoryId)->value('slug');
+
+        return $slug === 'seeds';
     }
 
     public function show(string $slug): View
@@ -114,7 +144,7 @@ class ItemsController extends Controller
 
     public function showUpload(string $id): View
     {
-        $upload = Upload::with('category')->findOrFail($id);
+        $upload = Upload::with(['category', 'seed'])->findOrFail($id);
         $relatedUploads = Upload::where('category_id', $upload->category_id)
             ->where('id', '!=', $upload->id)
             ->orderBy('name')
@@ -134,7 +164,7 @@ class ItemsController extends Controller
     {
         $this->ensureAdmin();
 
-        $upload = Upload::with('category')->findOrFail($id);
+        $upload = Upload::with(['category', 'seed'])->findOrFail($id);
         $categories = WikiCategory::orderBy('name')->get();
 
         return view('items.edit', [
@@ -149,20 +179,27 @@ class ItemsController extends Controller
 
         $upload = Upload::findOrFail($id);
 
-        $validated = request()->validate([
-            'image' => ['nullable', 'image', 'max:2048'],
-            'category_id' => ['required', 'exists:bloom.wiki_categories,id'],
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string', 'max:2000'],
-            'price' => ['nullable', 'numeric', 'min:0'],
-        ]);
+        $validated = request()->validate(array_merge($this->itemRules(), $this->seedRules()));
+
+        $seedData = $validated['seed'] ?? [];
 
         if (request()->hasFile('image')) {
             $path = request()->file('image')->store('uploads', 'public');
             $validated['image'] = $path;
         }
 
+        unset($validated['seed']);
+
         $upload->update($validated);
+
+        if ($this->isSeedsCategory($validated['category_id'])) {
+            $upload->seed()->updateOrCreate(
+                ['upload_id' => $upload->id],
+                $seedData
+            );
+        } else {
+            $upload->seed()->delete();
+        }
 
         return redirect()->route('items.upload', ['panel' => 'manage'])->with('status', 'Item updated successfully.');
     }

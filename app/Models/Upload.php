@@ -26,4 +26,9 @@ class Upload extends Model
     {
         return $this->belongsTo(WikiCategory::class, 'category_id');
     }
+
+    public function seed()
+    {
+        return $this->hasOne(Seed::class, 'upload_id');
+    }
 }

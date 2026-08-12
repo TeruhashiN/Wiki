@@ -92,6 +92,28 @@
                                             <td class="py-2 text-slate-500 font-semibold">Price</td>
                                             <td class="py-2 text-slate-200">{{ $upload->price ? '$' . number_format($upload->price, 2) : '—' }}</td>
                                         </tr>
+                                        @if($upload->category && $upload->category->slug === 'seeds' && $upload->seed)
+                                            <tr>
+                                                <td class="py-2 text-slate-500 font-semibold">Grow Time</td>
+                                                <td class="py-2 text-slate-200">{{ $upload->seed->grow_time ?? '—' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2 text-slate-500 font-semibold">Issue Count</td>
+                                                <td class="py-2 text-slate-200">{{ $upload->seed->issue_count ?? 0 }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2 text-slate-500 font-semibold">Issue Duration</td>
+                                                <td class="py-2 text-slate-200">{{ $upload->seed->issue_duration ?? '—' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2 text-slate-500 font-semibold">Quality</td>
+                                                <td class="py-2 text-slate-200">{{ $upload->seed->quality ?? '—' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2 text-slate-500 font-semibold">Merit Event</td>
+                                                <td class="py-2 text-slate-200">{{ $upload->seed->merit_event ?? '—' }}</td>
+                                            </tr>
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>

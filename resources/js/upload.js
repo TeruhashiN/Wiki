@@ -17,6 +17,23 @@ document.addEventListener('DOMContentLoaded', () => {
     btnUpload.addEventListener('click', () => openPanel(panelUpload));
     btnManage.addEventListener('click', () => openPanel(panelManage));
 
+    const categorySelect = document.getElementById('categorySelect');
+    const seedFields = document.getElementById('seedFields');
+
+    function toggleSeedFields() {
+        if (!categorySelect || !seedFields) {
+            return;
+        }
+        const selectedOption = categorySelect.options[categorySelect.selectedIndex];
+        const isSeeds = selectedOption && selectedOption.dataset.slug === 'seeds';
+        seedFields.classList.toggle('hidden', !isSeeds);
+    }
+
+    if (categorySelect && seedFields) {
+        categorySelect.addEventListener('change', toggleSeedFields);
+        toggleSeedFields();
+    }
+
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('panel') === 'manage') {
         openPanel(panelManage);

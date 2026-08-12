@@ -45,10 +45,10 @@
 
                             <div>
                                 <label class="block text-xs font-semibold text-slate-300 mb-2">Category</label>
-                                <select name="category_id" class="w-full rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-200 p-3 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/50" required>
+                                <select name="category_id" id="categorySelect" class="w-full rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-200 p-3 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/50" required>
                                     <option value="">Select category...</option>
                                     @foreach($categories as $category)
-                                        <option value="{{ $category->id }}" {{ $upload->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                        <option value="{{ $category->id }}" data-slug="{{ $category->slug }}" {{ $upload->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
                                     @endforeach
                                 </select>
                                 @error('category_id')<p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>@enderror
@@ -70,6 +70,44 @@
                                 <label class="block text-xs font-semibold text-slate-300 mb-2">Price</label>
                                 <input type="number" step="0.01" name="price" value="{{ old('price', $upload->price) }}" class="w-full rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-200 p-3 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/50">
                                 @error('price')<p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>@enderror
+                            </div>
+
+                            {{-- Seed-specific fields (shown when Category = Seeds) --}}
+                            <div id="seedFields" class="hidden">
+                                <div class="rounded-xl border border-slate-800 bg-slate-900/40 p-4 space-y-4">
+                                    <h3 class="text-sm font-bold text-indigo-400">Seed Details</h3>
+
+                                    <div class="grid sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-xs font-semibold text-slate-300 mb-2">Grow Time</label>
+                                            <input type="text" name="seed[grow_time]" value="{{ old('seed.grow_time', $upload->seed->grow_time ?? '') }}" placeholder="e.g. 2h 30m" class="w-full rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-200 p-3 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/50">
+                                            @error('seed.grow_time')<p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>@enderror
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-semibold text-slate-300 mb-2">Issue Count</label>
+                                            <input type="number" name="seed[issue_count]" value="{{ old('seed.issue_count', $upload->seed->issue_count ?? 0) }}" class="w-full rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-200 p-3 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/50">
+                                            @error('seed.issue_count')<p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>@enderror
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-300 mb-2">Issue Duration</label>
+                                        <input type="text" name="seed[issue_duration]" value="{{ old('seed.issue_duration', $upload->seed->issue_duration ?? '') }}" placeholder="e.g. Every 4h" class="w-full rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-200 p-3 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/50">
+                                        @error('seed.issue_duration')<p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>@enderror
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-300 mb-2">Quality</label>
+                                        <input type="text" name="seed[quality]" value="{{ old('seed.quality', $upload->seed->quality ?? '') }}" placeholder="e.g. Normal, Silver, Gold" class="w-full rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-200 p-3 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/50">
+                                        @error('seed.quality')<p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>@enderror
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-300 mb-2">Merit Event</label>
+                                        <input type="text" name="seed[merit_event]" value="{{ old('seed.merit_event', $upload->seed->merit_event ?? '') }}" placeholder="e.g. Harvest Moon Festival" class="w-full rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-200 p-3 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/50">
+                                        @error('seed.merit_event')<p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>@enderror
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="flex items-center gap-3 pt-2">
