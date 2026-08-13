@@ -73,7 +73,10 @@
                             </div>
 
                             {{-- Seed-specific fields (shown when Category = Seeds) --}}
-                            <div id="seedFields" class="hidden">
+                            @php
+                                $currentCategory = $categories->firstWhere('id', old('category_id', $upload->category_id));
+                            @endphp
+                            <div id="seedFields" class="{{ ($currentCategory && $currentCategory->slug === 'seeds') ? '' : 'hidden' }}">
                                 <div class="rounded-xl border border-slate-800 bg-slate-900/40 p-4 space-y-4">
                                     <h3 class="text-sm font-bold text-indigo-400">Seed Details</h3>
 
