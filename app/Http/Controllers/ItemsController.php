@@ -51,9 +51,10 @@ class ItemsController extends Controller
     {
         $this->ensureAdmin();
 
-        $validated = request()->validate(array_merge($this->itemRules(), $this->seedRules()));
+        $validated = request()->validate(array_merge($this->itemRules(), $this->seedRules(), $this->toolRules()));
 
         $seedData = $validated['seed'] ?? [];
+        $toolData = $validated['tool'] ?? [];
 
         if (request()->hasFile('image')) {
             $path = request()->file('image')->store('uploads', 'public');
@@ -61,11 +62,16 @@ class ItemsController extends Controller
         }
 
         unset($validated['seed']);
+        unset($validated['tool']);
 
         $upload = Upload::create($validated);
 
         if ($this->isSeedsCategory($validated['category_id'])) {
             $upload->seed()->create($seedData);
+        }
+
+        if ($this->isToolsCategory($validated['category_id'])) {
+            $upload->tool()->create($toolData);
         }
 
         return back()->with('status', 'Item uploaded successfully.');
@@ -119,11 +125,26 @@ class ItemsController extends Controller
         ];
     }
 
+    private function toolRules(): array
+    {
+        return [
+            'tool.broken_chance' => ['nullable', 'string', 'max:255'],
+            'tool.problem' => ['nullable', 'string', 'max:255'],
+        ];
+    }
+
     private function isSeedsCategory(int $categoryId): bool
     {
         $slug = WikiCategory::where('id', $categoryId)->value('slug');
 
         return $slug === 'seeds';
+    }
+
+    private function isToolsCategory(int $categoryId): bool
+    {
+        $slug = WikiCategory::where('id', $categoryId)->value('slug');
+
+        return $slug === 'tools';
     }
 
     public function show(string $slug): View
@@ -144,7 +165,7 @@ class ItemsController extends Controller
 
     public function showUpload(string $id): View
     {
-        $upload = Upload::with(['category', 'seed'])->findOrFail($id);
+        $upload = Upload::with(['category', 'seed', 'tool'])->findOrFail($id);
         $relatedUploads = Upload::where('category_id', $upload->category_id)
             ->where('id', '!=', $upload->id)
             ->orderBy('name')
@@ -164,7 +185,7 @@ class ItemsController extends Controller
     {
         $this->ensureAdmin();
 
-        $upload = Upload::with(['category', 'seed'])->findOrFail($id);
+        $upload = Upload::with(['category', 'seed', 'tool'])->findOrFail($id);
         $categories = WikiCategory::orderBy('name')->get();
 
         return view('items.edit', [
@@ -179,9 +200,10 @@ class ItemsController extends Controller
 
         $upload = Upload::findOrFail($id);
 
-        $validated = request()->validate(array_merge($this->itemRules(), $this->seedRules()));
+        $validated = request()->validate(array_merge($this->itemRules(), $this->seedRules(), $this->toolRules()));
 
         $seedData = $validated['seed'] ?? [];
+        $toolData = $validated['tool'] ?? [];
 
         if (request()->hasFile('image')) {
             $path = request()->file('image')->store('uploads', 'public');
@@ -189,6 +211,7 @@ class ItemsController extends Controller
         }
 
         unset($validated['seed']);
+        unset($validated['tool']);
 
         $upload->update($validated);
 
@@ -199,6 +222,15 @@ class ItemsController extends Controller
             );
         } else {
             $upload->seed()->delete();
+        }
+
+        if ($this->isToolsCategory($validated['category_id'])) {
+            $upload->tool()->updateOrCreate(
+                ['upload_id' => $upload->id],
+                $toolData
+            );
+        } else {
+            $upload->tool()->delete();
         }
 
         return redirect()->route('items.upload', ['panel' => 'manage'])->with('status', 'Item updated successfully.');

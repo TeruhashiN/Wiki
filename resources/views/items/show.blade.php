@@ -114,6 +114,16 @@
                                                 <td class="py-2 text-slate-200">{{ $upload->seed->merit_event ?? '—' }}</td>
                                             </tr>
                                         @endif
+                                        @if($upload->category && $upload->category->slug === 'tools' && $upload->tool)
+                                            <tr>
+                                                <td class="py-2 text-slate-500 font-semibold">BrokenChance</td>
+                                                <td class="py-2 text-slate-200">{{ $upload->tool->broken_chance ?? '—' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-2 text-slate-500 font-semibold">Problem</td>
+                                                <td class="py-2 text-slate-200">{{ $upload->tool->problem ?? '—' }}</td>
+                                            </tr>
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>

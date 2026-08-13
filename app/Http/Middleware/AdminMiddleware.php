@@ -10,7 +10,7 @@ class AdminMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (!auth('bloom')->check() || auth('bloom')->user()->role !== 'admin') {
+        if (! auth('bloom')->check() || auth('bloom')->user()->role !== 'admin') {
             return redirect()->route('dashboard')
                 ->withErrors(['error' => 'You do not have permission to access this page.']);
         }

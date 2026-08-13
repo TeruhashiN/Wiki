@@ -113,6 +113,25 @@
                                 </div>
                             </div>
 
+                            {{-- Tool-specific fields (shown when Category = Tools) --}}
+                            <div id="toolFields" class="{{ ($currentCategory && $currentCategory->slug === 'tools') ? '' : 'hidden' }}">
+                                <div class="rounded-xl border border-slate-800 bg-slate-900/40 p-4 space-y-4">
+                                    <h3 class="text-sm font-bold text-indigo-400">Tool Details</h3>
+
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-300 mb-2">BrokenChance Percent</label>
+                                        <input type="text" name="tool[broken_chance]" value="{{ old('tool.broken_chance', $upload->tool->broken_chance ?? '') }}" placeholder="e.g. 10%" class="w-full rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-200 p-3 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/50">
+                                        @error('tool.broken_chance')<p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>@enderror
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-300 mb-2">Problem</label>
+                                        <input type="text" name="tool[problem]" value="{{ old('tool.problem', $upload->tool->problem ?? '') }}" placeholder="e.g. Fishing Rate, Energy Cost Reduction" class="w-full rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-200 p-3 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/50">
+                                        @error('tool.problem')<p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>@enderror
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="flex items-center gap-3 pt-2">
                                 <button type="submit" class="px-6 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 transition-all shadow-lg shadow-indigo-600/20">
                                     Update Item

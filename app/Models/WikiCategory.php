@@ -37,4 +37,3 @@ class WikiCategory extends Model
         'sort_order' => 'integer',
     ];
 }
-

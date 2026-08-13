@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const categorySelect = document.getElementById('categorySelect');
     const seedFields = document.getElementById('seedFields');
+    const toolFields = document.getElementById('toolFields');
 
     function toggleSeedFields() {
         if (!categorySelect || !seedFields) {
@@ -29,9 +30,23 @@ document.addEventListener('DOMContentLoaded', () => {
         seedFields.classList.toggle('hidden', !isSeeds);
     }
 
+    function toggleToolFields() {
+        if (!categorySelect || !toolFields) {
+            return;
+        }
+        const selectedOption = categorySelect.options[categorySelect.selectedIndex];
+        const isTools = selectedOption && selectedOption.dataset.slug === 'tools';
+        toolFields.classList.toggle('hidden', !isTools);
+    }
+
     if (categorySelect && seedFields) {
         categorySelect.addEventListener('change', toggleSeedFields);
         toggleSeedFields();
+    }
+
+    if (categorySelect && toolFields) {
+        categorySelect.addEventListener('change', toggleToolFields);
+        toggleToolFields();
     }
 
     const urlParams = new URLSearchParams(window.location.search);

@@ -31,4 +31,9 @@ class Upload extends Model
     {
         return $this->hasOne(Seed::class, 'upload_id');
     }
+
+    public function tool()
+    {
+        return $this->hasOne(Tool::class, 'upload_id');
+    }
 }

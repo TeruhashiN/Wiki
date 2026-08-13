@@ -102,4 +102,3 @@ class BloomUser extends Authenticatable
         return null;
     }
 }
-

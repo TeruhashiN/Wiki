@@ -27,4 +27,3 @@ Route::delete('/uploads/{id}', [ItemsController::class, 'destroy'])->name('uploa
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-

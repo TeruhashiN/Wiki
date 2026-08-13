@@ -79,4 +79,3 @@ class WikiCategorySeeder extends Seeder
         }
     }
 }
-
