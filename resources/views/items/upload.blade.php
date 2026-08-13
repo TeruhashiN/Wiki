@@ -245,7 +245,7 @@
 
                                         <div>
                                             <label class="block text-xs font-semibold text-slate-300 mb-2">Problem</label>
-                                            <input type="text" name="tool[problem]" value="{{ old('tool.problem') }}" placeholder="e.g. Fishing Rate, Energy Cost Reduction" class="w-full rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-200 p-3 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/50">
+                                            <input type="text" name="tool[problem]" value="{{ old('tool.problem') }}" placeholder="e.g. Fishing Rate, Energy Cost Reduction, etc... (just comma (,) for every new line)" class="w-full rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-200 p-3 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/50">
                                             @error('tool.problem')<p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>@enderror
                                         </div>
                                     </div>

@@ -120,8 +120,16 @@
                                                 <td class="py-2 text-slate-200">{{ $upload->tool->broken_chance ?? '—' }}</td>
                                             </tr>
                                             <tr>
-                                                <td class="py-2 text-slate-500 font-semibold">Problem</td>
-                                                <td class="py-2 text-slate-200">{{ $upload->tool->problem ?? '—' }}</td>
+                                                <td class="py-2 text-slate-500 font-semibold align-top">Problem</td>
+                                                <td class="py-2 text-slate-200">
+                                                    @if($upload->tool && $upload->tool->problem)
+                                                        @foreach(explode(',', $upload->tool->problem) as $line)
+                                                            {{ trim($line) }}<br>
+                                                        @endforeach
+                                                    @else
+                                                        —
+                                                    @endif
+                                                </td>
                                             </tr>
                                         @endif
                                     </tbody>
