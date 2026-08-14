@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\News;
 use App\Models\Upload;
 use App\Models\WikiCategory;
 use Illuminate\Http\RedirectResponse;
@@ -92,6 +93,29 @@ class ItemsController extends Controller
         WikiCategory::create($validated);
 
         return back()->with('status', 'Category added successfully.');
+    }
+
+    public function storeNews(): RedirectResponse
+    {
+        $this->ensureAdmin();
+
+        $validated = request()->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'image' => ['nullable', 'image', 'max:2048'],
+            'description' => ['nullable', 'string', 'max:2000'],
+            'news_by' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $validated['date'] = now()->toDateString();
+
+        if (request()->hasFile('image')) {
+            $path = request()->file('image')->store('uploads', 'public');
+            $validated['image'] = $path;
+        }
+
+        News::create($validated);
+
+        return back()->with('status', 'News added successfully.');
     }
 
     private function ensureAdmin(): void

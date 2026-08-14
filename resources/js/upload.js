@@ -2,20 +2,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnCategory = document.getElementById('btnCategory');
     const btnUpload = document.getElementById('btnUpload');
     const btnManage = document.getElementById('btnManage');
+    const btnNews = document.getElementById('btnNews');
     const panelCategory = document.getElementById('panelCategory');
     const panelUpload = document.getElementById('panelUpload');
     const panelManage = document.getElementById('panelManage');
+    const panelNews = document.getElementById('panelNews');
 
     function openPanel(panel) {
-        panelCategory.classList.remove('open');
-        panelUpload.classList.remove('open');
-        panelManage.classList.remove('open');
+        if (panelCategory) panelCategory.classList.remove('open');
+        if (panelUpload) panelUpload.classList.remove('open');
+        if (panelManage) panelManage.classList.remove('open');
+        if (panelNews) panelNews.classList.remove('open');
         panel.classList.add('open');
     }
 
-    btnCategory.addEventListener('click', () => openPanel(panelCategory));
-    btnUpload.addEventListener('click', () => openPanel(panelUpload));
-    btnManage.addEventListener('click', () => openPanel(panelManage));
+    if (btnCategory) btnCategory.addEventListener('click', () => openPanel(panelCategory));
+    if (btnUpload) btnUpload.addEventListener('click', () => openPanel(panelUpload));
+    if (btnManage) btnManage.addEventListener('click', () => openPanel(panelManage));
+    if (btnNews) btnNews.addEventListener('click', () => openPanel(panelNews));
 
     const categorySelect = document.getElementById('categorySelect');
     const seedFields = document.getElementById('seedFields');
