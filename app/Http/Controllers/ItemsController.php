@@ -35,6 +35,8 @@ class ItemsController extends Controller
 
         $uploads = $uploadsQuery->paginate(10)->withQueryString();
 
+        $news = News::orderByDesc('date')->get();
+
         if (request()->ajax()) {
             return response()->json([
                 'html' => view('items.partials.manage-items', compact('uploads'))->render(),
@@ -45,6 +47,7 @@ class ItemsController extends Controller
             'categories' => $categories,
             'uploads' => $uploads,
             'search' => $search,
+            'news' => $news,
         ]);
     }
 
@@ -97,16 +100,15 @@ class ItemsController extends Controller
 
     public function storeNews(): RedirectResponse
     {
-        $this->ensureAdmin();
+        $this->ensureModeratorOrAdmin();
 
         $validated = request()->validate([
             'title' => ['required', 'string', 'max:255'],
             'image' => ['nullable', 'image', 'max:2048'],
             'description' => ['nullable', 'string', 'max:2000'],
             'news_by' => ['nullable', 'string', 'max:255'],
+            'date' => ['required', 'date'],
         ]);
-
-        $validated['date'] = now()->toDateString();
 
         if (request()->hasFile('image')) {
             $path = request()->file('image')->store('uploads', 'public');
@@ -131,6 +133,51 @@ class ItemsController extends Controller
             'newsItem' => $newsItem,
             'relatedNews' => $relatedNews,
         ]);
+    }
+
+    public function editNews(string $id): View
+    {
+        $this->ensureAdmin();
+
+        $newsItem = News::findOrFail($id);
+
+        return view('news.edit', [
+            'newsItem' => $newsItem,
+        ]);
+    }
+
+    public function updateNews(string $id): RedirectResponse
+    {
+        $this->ensureAdmin();
+
+        $newsItem = News::findOrFail($id);
+
+        $validated = request()->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'image' => ['nullable', 'image', 'max:2048'],
+            'description' => ['nullable', 'string', 'max:2000'],
+            'news_by' => ['nullable', 'string', 'max:255'],
+            'date' => ['required', 'date'],
+        ]);
+
+        if (request()->hasFile('image')) {
+            $path = request()->file('image')->store('uploads', 'public');
+            $validated['image'] = $path;
+        }
+
+        $newsItem->update($validated);
+
+        return redirect()->route('items.upload', ['panel' => 'manageNews'])->with('status', 'News updated successfully.');
+    }
+
+    public function destroyNews(string $id): RedirectResponse
+    {
+        $this->ensureAdmin();
+
+        $newsItem = News::findOrFail($id);
+        $newsItem->delete();
+
+        return back()->with('status', 'News deleted successfully.');
     }
 
     public function indexNews(): View

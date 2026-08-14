@@ -29,16 +29,16 @@
                     {{-- Action Buttons --}}
                     <div class="flex flex-wrap gap-3 mb-8">
                         @auth('bloom')
-                        @if(auth('bloom')->user()->role === 'admin')
-                        <button type="button" id="btnCategory" class="action-btn inline-flex items-center gap-3 rounded-xl border border-emerald-500/30 bg-slate-900/80 px-4 py-3 text-left hover:border-emerald-400 hover:shadow-lg hover:shadow-emerald-500/10">
-                            <div class="w-10 h-10 shrink-0 rounded-lg bg-gradient-to-br from-emerald-600 to-teal-600 flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                        @if(in_array(auth('bloom')->user()->role, ['admin', 'moderator']))
+                        <button type="button" id="btnNews" class="action-btn inline-flex items-center gap-3 rounded-xl border border-cyan-500/30 bg-slate-900/80 px-4 py-3 text-left hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/10">
+                            <div class="w-10 h-10 shrink-0 rounded-lg bg-gradient-to-br from-cyan-600 to-sky-600 flex items-center justify-center text-white shadow-md shadow-cyan-500/20">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h.008v.008H12V7.5zm0 3.75h.008v.008H12v-.008zm0 3.75h.008v.008H12v-.008zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             </div>
                             <div>
-                                <h3 class="text-sm font-bold text-white">Add Wiki Category</h3>
-                                <p class="text-xs text-slate-400 leading-relaxed hidden sm:block">Create a new category</p>
+                                <h3 class="text-sm font-bold text-white">Add News</h3>
+                                <p class="text-xs text-slate-400 leading-relaxed hidden sm:block">Post an announcement</p>
                             </div>
-                            <svg class="w-4 h-4 shrink-0 text-emerald-400 ml-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+                            <svg class="w-4 h-4 shrink-0 text-cyan-400 ml-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
                         </button>
                         @endif
                         @endauth
@@ -93,6 +93,16 @@
                                 <p class="text-xs text-slate-400 leading-relaxed hidden sm:block">Post an announcement</p>
                             </div>
                             <svg class="w-4 h-4 shrink-0 text-cyan-400 ml-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+                        </button>
+                        <button type="button" id="btnManageNews" class="action-btn inline-flex items-center gap-3 rounded-xl border border-rose-500/30 bg-slate-900/80 px-4 py-3 text-left hover:border-rose-400 hover:shadow-lg hover:shadow-rose-500/10">
+                            <div class="w-10 h-10 shrink-0 rounded-lg bg-gradient-to-br from-rose-600 to-pink-600 flex items-center justify-center text-white shadow-md shadow-rose-500/20">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/></svg>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-white">Manage News</h3>
+                                <p class="text-xs text-slate-400 leading-relaxed hidden sm:block">Edit or delete news</p>
+                            </div>
+                            <svg class="w-4 h-4 shrink-0 text-rose-400 ml-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
                         </button>
                         @endif
                         @endauth
@@ -183,7 +193,7 @@
 
                     {{-- News Form Panel --}}
                     @auth('bloom')
-                    @if(auth('bloom')->user()->role === 'admin')
+                    @if(in_array(auth('bloom')->user()->role, ['admin', 'moderator']))
                     <div id="panelNews" class="panel">
                         <div class="rounded-2xl border border-cyan-500/30 bg-slate-900/50 p-6 shadow-lg shadow-cyan-500/5">
                             <div class="flex items-center gap-3 mb-6">
@@ -222,8 +232,8 @@
 
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-300 mb-2">Date</label>
-                                    <input type="text" value="{{ now()->toDateString() }}" disabled class="w-full rounded-xl bg-slate-800 border border-slate-700 text-sm text-slate-400 p-3 cursor-not-allowed">
-                                    <p class="mt-1.5 text-xs text-slate-500">Date is automatically set when the news is posted.</p>
+                                    <input type="date" name="date" value="{{ old('date', now()->toDateString()) }}" class="w-full rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-200 p-3 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500/50">
+                                    @error('date')<p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>@enderror
                                 </div>
 
                                 <button type="submit" class="w-full py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-cyan-600 to-sky-600 hover:from-cyan-500 hover:to-sky-500 transition-all shadow-lg shadow-cyan-600/20 hover:shadow-xl hover:shadow-cyan-600/30">
@@ -235,7 +245,64 @@
                     @endif
                     @endauth
 
-                    {{-- Upload Form Panel --}}
+                    {{-- Manage News Panel --}}
+                    @auth('bloom')
+                    @if(auth('bloom')->user()->role === 'admin')
+                    <div id="panelManageNews" class="panel">
+                        <div class="rounded-2xl border border-rose-500/30 bg-slate-900/50 p-6 shadow-lg shadow-rose-500/5">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-1 h-8 rounded-full bg-gradient-to-b from-rose-500 to-pink-500"></div>
+                                <div>
+                                    <h2 class="text-lg font-bold text-white">Manage News</h2>
+                                    <p class="text-xs text-slate-500">Edit or delete existing news.</p>
+                                </div>
+                            </div>
+
+                            <form id="manageNewsSearchForm" action="{{ route('items.upload') }}" method="GET" class="mb-4">
+                                <input type="hidden" name="panel" value="manageNews">
+                                <label class="block text-xs font-semibold text-slate-300 mb-2">Search</label>
+                                <input id="manageNewsSearchInput" type="text" name="search" value="{{ request('search') }}" placeholder="Search news..." class="w-full rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-200 p-3 focus:border-rose-500 focus:outline-none focus:ring-1 focus:ring-rose-500/50">
+                            </form>
+
+                            <div id="manageNewsList" class="max-h-[360px] overflow-y-auto space-y-2 pr-1">
+                                @forelse($news ?? [] as $newsItem)
+                                    <div class="flex items-center gap-3 p-3 rounded-xl border border-slate-800 bg-slate-950/40 hover:border-slate-700 transition-colors">
+                                        <div class="w-10 h-10 shrink-0 rounded-lg overflow-hidden bg-slate-800 border border-slate-700">
+                                            @if($newsItem->image)
+                                                <img src="{{ asset('storage/' . $newsItem->image) }}" alt="{{ $newsItem->title }}" class="w-full h-full object-cover">
+                                            @else
+                                                <div class="w-full h-full flex items-center justify-center text-slate-500">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h.008v.008H12V7.5zm0 3.75h.008v.008H12v-.008zm0 3.75h.008v.008H12v-.008zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-bold text-white truncate">{{ $newsItem->title }}</p>
+                                            <p class="text-[11px] text-slate-500">{{ $newsItem->news_by ?? 'Unknown' }} • {{ \Carbon\Carbon::parse($newsItem->date)->format('M d, Y') }}</p>
+                                        </div>
+                                        <div class="flex items-center gap-2 shrink-0">
+                                            <a href="{{ route('news.edit', $newsItem->id) }}" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors">
+                                                Edit
+                                            </a>
+                                            <form action="{{ route('news.destroy', $newsItem->id) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this news?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="text-center py-8">
+                                        <p class="text-sm text-slate-400">No news posted yet.</p>
+                                    </div>
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                    @endauth
                     <div id="panelUpload" class="panel">
                         <div class="rounded-2xl border border-indigo-500/30 bg-slate-900/50 p-6 shadow-lg shadow-indigo-500/5">
                             <div class="flex items-center gap-3 mb-6">
