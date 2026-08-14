@@ -22,7 +22,7 @@ class ItemsController extends Controller
 
     public function create(): View
     {
-        $this->ensureAdmin();
+        $this->ensureModeratorOrAdmin();
 
         $categories = WikiCategory::orderBy('name')->get();
         $search = request()->query('search');
@@ -49,7 +49,7 @@ class ItemsController extends Controller
 
     public function store(): RedirectResponse
     {
-        $this->ensureAdmin();
+        $this->ensureModeratorOrAdmin();
 
         $validated = request()->validate(array_merge($this->itemRules(), $this->seedRules(), $this->toolRules()));
 
@@ -99,6 +99,15 @@ class ItemsController extends Controller
         $user = auth('bloom')->user();
 
         if (! $user || $user->role !== 'admin') {
+            abort(403);
+        }
+    }
+
+    private function ensureModeratorOrAdmin(): void
+    {
+        $user = auth('bloom')->user();
+
+        if (! $user || ($user->role !== 'admin' && $user->role !== 'moderator'  && $user->role !== 'bloom_user')) {
             abort(403);
         }
     }

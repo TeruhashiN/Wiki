@@ -28,6 +28,8 @@
 
                     {{-- Action Buttons --}}
                     <div class="grid sm:grid-cols-3 gap-4 mb-8">
+                        @auth('bloom')
+                        @if(auth('bloom')->user()->role === 'admin')
                         <button type="button" id="btnCategory" class="action-btn group relative overflow-hidden rounded-2xl border-2 border-emerald-500/30 bg-slate-900/80 p-6 text-left hover:border-emerald-400 hover:shadow-xl hover:shadow-emerald-500/10">
                             <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             <div class="relative flex items-start gap-4">
@@ -41,7 +43,10 @@
                                 <svg class="w-5 h-5 shrink-0 text-emerald-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
                             </div>
                         </button>
+                        @endif
+                        @endauth
 
+                        @auth('bloom')
                         <button type="button" id="btnUpload" class="action-btn group relative overflow-hidden rounded-2xl border-2 border-indigo-500/30 bg-slate-900/80 p-6 text-left hover:border-indigo-400 hover:shadow-xl hover:shadow-indigo-500/10">
                             <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             <div class="relative flex items-start gap-4">
@@ -55,7 +60,24 @@
                                 <svg class="w-5 h-5 shrink-0 text-indigo-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
                             </div>
                         </button>
+                        @else
+                        <button type="button" id="btnUpload" class="action-btn group relative overflow-hidden rounded-2xl border-2 border-indigo-500/30 bg-slate-900/80 p-6 text-left hover:border-indigo-400 hover:shadow-xl hover:shadow-indigo-500/10">
+                            <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <div class="relative flex items-start gap-4">
+                                <div class="w-14 h-14 shrink-0 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-2xl shadow-lg shadow-indigo-500/30 group-hover:scale-110 transition-transform">
+                                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="text-lg font-bold text-white mb-1">Upload Item</h3>
+                                    <p class="text-xs text-slate-400 leading-relaxed">Add a new item with image, details, and pricing.</p>
+                                </div>
+                                <svg class="w-5 h-5 shrink-0 text-indigo-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+                            </div>
+                        </button>
+                        @endauth
 
+                        @auth('bloom')
+                        @if(auth('bloom')->user()->role === 'admin')
                         <button type="button" id="btnManage" class="action-btn group relative overflow-hidden rounded-2xl border-2 border-amber-500/30 bg-slate-900/80 p-6 text-left hover:border-amber-400 hover:shadow-xl hover:shadow-amber-500/10">
                             <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             <div class="relative flex items-start gap-4">
@@ -69,9 +91,13 @@
                                 <svg class="w-5 h-5 shrink-0 text-amber-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
                             </div>
                         </button>
+                        @endif
+                        @endauth
                     </div>
 
                     {{-- Category Form Panel --}}
+                    @auth('bloom')
+                    @if(auth('bloom')->user()->role === 'admin')
                     <div id="panelCategory" class="panel">
                         <div class="rounded-2xl border border-emerald-500/30 bg-slate-900/50 p-6 shadow-lg shadow-emerald-500/5">
                             <div class="flex items-center gap-3 mb-6">
@@ -122,8 +148,12 @@
                             </form>
                         </div>
                     </div>
+                    @endif
+                    @endauth
 
                     {{-- Manage Items Panel --}}
+                    @auth('bloom')
+                    @if(auth('bloom')->user()->role === 'admin')
                     <div id="panelManage" class="panel">
                         <div class="rounded-2xl border border-amber-500/30 bg-slate-900/50 p-6 shadow-lg shadow-amber-500/5">
                             <div class="flex items-center gap-3 mb-4">
@@ -145,6 +175,8 @@
                             </div>
                         </div>
                     </div>
+                    @endif
+                    @endauth
 
                     {{-- Upload Form Panel --}}
                     <div id="panelUpload" class="panel">
@@ -272,14 +304,14 @@
             const panelManage = document.getElementById('panelManage');
 
             function openPanel(panel) {
-                panelCategory.classList.remove('open');
-                panelUpload.classList.remove('open');
-                panelManage.classList.remove('open');
+                if (panelCategory) panelCategory.classList.remove('open');
+                if (panelUpload) panelUpload.classList.remove('open');
+                if (panelManage) panelManage.classList.remove('open');
                 panel.classList.add('open');
             }
 
-            btnCategory.addEventListener('click', () => openPanel(panelCategory));
-            btnUpload.addEventListener('click', () => openPanel(panelUpload));
-            btnManage.addEventListener('click', () => openPanel(panelManage));
+            if (btnCategory) btnCategory.addEventListener('click', () => openPanel(panelCategory));
+            if (btnUpload) btnUpload.addEventListener('click', () => openPanel(panelUpload));
+            if (btnManage) btnManage.addEventListener('click', () => openPanel(panelManage));
         });
     </script>
