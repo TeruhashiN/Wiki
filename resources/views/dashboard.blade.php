@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>GameWiki — The Game Encyclopedia</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/dashboard.js'])
     <style>
         .sidebar-scroll::-webkit-scrollbar { width: 5px; }
         .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
@@ -187,7 +187,7 @@
                                                 </span>
                                             @endif
                                         </div>
-                                        <p class="mt-2 text-[11px] text-slate-500 line-clamp-2">{{ $game->description ?? 'No description available.' }}</p>
+                                        
                                     </div>
                                 </a>
                             @endforeach
@@ -246,32 +246,30 @@
                             <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg>
                             Latest News
                         </h2>
-                        <a href="#" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition-colors">All News →</a>
+                        <a href="{{ route('news.index') }}" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition-colors">All News →</a>
                     </div>
 
                     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        @php
-                            $news = [
-                                ['title' => 'Summer Gaming Fest 2025: All the Big Reveals', 'tag' => 'Events', 'date' => '2 hours ago', 'gradient' => 'from-indigo-600 to-purple-700'],
-                                ['title' => 'Patch 3.2 Brings Major Balance Changes to Arena', 'tag' => 'Update', 'date' => '5 hours ago', 'gradient' => 'from-emerald-600 to-teal-700'],
-                                ['title' => 'Indie Spotlight: 10 Hidden Gems You Must Try', 'tag' => 'Features', 'date' => '8 hours ago', 'gradient' => 'from-orange-500 to-red-600'],
-                            ];
-                        @endphp
-                        @foreach($news as $n)
-                            <a href="#" class="group rounded-xl overflow-hidden border border-slate-800 bg-slate-900/50 hover:border-slate-600 transition-all hover:-translate-y-0.5">
-                                <div class="h-24 bg-gradient-to-br {{ $n['gradient'] }} relative">
+                        @forelse($news as $n)
+                            <a href="{{ route('news.show', $n->id) }}" class="group rounded-xl overflow-hidden border border-slate-800 bg-slate-900/50 hover:border-slate-600 transition-all hover:-translate-y-0.5">
+                                <div class="h-24 bg-gradient-to-br from-indigo-600 to-purple-700 relative">
+                                    @if($n->image)
+                                        <img src="{{ asset('storage/'.$n->image) }}" alt="{{ $n->title }}" class="absolute inset-0 w-full h-full object-cover">
+                                    @endif
                                     <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22none%22/><circle cx=%2225%22 cy=%2225%22 r=%222%22 fill=%22white%22/><circle cx=%2275%22 cy=%2275%22 r=%222%22 fill=%22white%22/></svg>');"></div>
-                                    <span class="absolute top-3 left-3 text-[10px] font-bold px-2 py-0.5 rounded bg-slate-950/60 backdrop-blur border border-white/20 text-white">{{ $n['tag'] }}</span>
+                                    <span class="absolute top-3 left-3 text-[10px] font-bold px-2 py-0.5 rounded bg-slate-950/60 backdrop-blur border border-white/20 text-white">News</span>
                                 </div>
                                 <div class="p-4">
-                                    <h3 class="text-sm font-bold text-white leading-snug group-hover:text-indigo-300 transition-colors line-clamp-2">{{ $n['title'] }}</h3>
+                                    <h3 class="text-sm font-bold text-white leading-snug group-hover:text-indigo-300 transition-colors line-clamp-2">{{ $n->title }}</h3>
                                     <p class="mt-2 text-[11px] text-slate-500 flex items-center gap-1">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                        {{ $n['date'] }}
+                                        {{ $n->date->format('M d, Y') }}
                                     </p>
                                 </div>
                             </a>
-                        @endforeach
+                        @empty
+                            <p class="text-sm text-slate-500 col-span-full">No news yet.</p>
+                        @endforelse
                     </div>
                 </section>
 
@@ -289,18 +287,6 @@
         </div>
     </div>
 
-    <script>
-        // Keyboard shortcut: Ctrl+K focuses search
-        document.addEventListener('DOMContentLoaded', function () {
-            document.addEventListener('keydown', function (e) {
-                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
-                    e.preventDefault();
-                    const input = document.querySelector('header input[type="text"]');
-                    if (input) input.focus();
-                }
-            });
-        });
-    </script>
 </body>
 </html>
 

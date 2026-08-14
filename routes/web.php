@@ -12,6 +12,8 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/admin/users', [AdminController::class, 'index'])->name('admin.users');
     Route::post('/admin/users', [AdminController::class, 'store'])->name('admin.users.store');
     Route::post('/news', [ItemsController::class, 'storeNews'])->name('news.store');
+Route::get('/news', [ItemsController::class, 'indexNews'])->name('news.index');
+Route::get('/news/{id}', [ItemsController::class, 'showNews'])->name('news.show');
 });
 
 Route::get('/items', [ItemsController::class, 'index'])->name('items');

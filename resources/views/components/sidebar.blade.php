@@ -25,6 +25,7 @@
             @php
                 $isDashboard = request()->routeIs('dashboard');
                 $isItems = request()->routeIs(['items', 'items.*', 'categories.*', 'uploads.*']);
+                $isNews = request()->routeIs(['news', 'news.*']);
             @endphp
 
             <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium {{ $isDashboard ? 'text-white bg-gradient-to-r from-indigo-600/40 to-purple-600/30 border border-indigo-500/30' : 'text-slate-300 hover:text-white hover:bg-slate-800/70 transition-colors group' }}">
@@ -41,12 +42,11 @@
                 Items
             </a>
 
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 transition-colors group">
-                <svg class="w-5 h-5 text-slate-400 group-hover:text-indigo-400 transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12.75 3.03v.568c0 .334.148.65.405.864l1.068.89c.442.369.535 1.01.216 1.49l-.51.766a2.25 2.25 0 01-1.161.886l-.143.048a2.25 2.25 0 00-1.036 2.968l.413.826a2.25 2.25 0 001.036 1.036l.826.413a2.25 2.25 0 002.968-1.036l.048-.143a2.25 2.25 0 01.886-1.161l.766-.51a2.25 2.25 0 011.49-.216l.89.213c.216.054.448-.025.66-.194a2.25 2.25 0 00.467-.659l.149-.322a2.25 2.25 0 00-1.026-2.854l-.463-.206a2.25 2.25 0 01-1.036-1.036l-.206-.463a2.25 2.25 0 00-2.854-1.026l-.322.149a2.25 2.25 0 01-1.07.15l-.274-.05a2.25 2.25 0 00-2.25 3.004l.052.133z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9.75l-2.25 2.25 1.5 1.5 2.25-2.25-1.5-1.5zM6.75 3.75c-1.5 1.5-3 3.75-3 6.75s1.5 5.25 3 6.75c0 0-1.5 1.5-3 1.5 1.5 1.5 3 2.25 6 2.25"/>
+            <a href="{{ route('news.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium {{ $isNews ? 'text-white bg-gradient-to-r from-indigo-600/40 to-purple-600/30 border border-indigo-500/30' : 'text-slate-300 hover:text-white hover:bg-slate-800/70 transition-colors group' }}">
+                <svg class="w-5 h-5 {{ $isNews ? 'text-indigo-400' : 'text-slate-400 group-hover:text-indigo-400 transition-colors' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12m-3.75.75h9m-9 3.75h9m-9 3.75h9M3.75 6h16.5M3.75 12h16.5m-16.5 6h16.5"/>
                 </svg>
-                New Releases
+                News
             </a>
 
             <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 transition-colors group">

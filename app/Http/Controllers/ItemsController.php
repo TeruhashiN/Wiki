@@ -118,6 +118,30 @@ class ItemsController extends Controller
         return back()->with('status', 'News added successfully.');
     }
 
+    public function showNews(string $id): View
+    {
+        $newsItem = News::findOrFail($id);
+
+        $relatedNews = News::where('id', '!=', $newsItem->id)
+            ->orderByDesc('date')
+            ->take(5)
+            ->get();
+
+        return view('news.show', [
+            'newsItem' => $newsItem,
+            'relatedNews' => $relatedNews,
+        ]);
+    }
+
+    public function indexNews(): View
+    {
+        $newsItems = News::orderByDesc('date')->paginate(12);
+
+        return view('news.index', [
+            'newsItems' => $newsItems,
+        ]);
+    }
+
     private function ensureAdmin(): void
     {
         $user = auth('bloom')->user();

@@ -19,7 +19,7 @@ class AdminController extends Controller
         $validated = $request->validate([
             'bloom_username' => ['required', 'string', 'max:255', 'unique:bloom.bloom_user,bloom_username'],
             'bloom_password' => ['required', 'string', 'min:6'],
-            'bloom_role' => ['required', 'in:admin,user'],
+            'bloom_role' => ['required', 'in:admin,user,moderator'],
         ]);
 
         BloomUser::create([

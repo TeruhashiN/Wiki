@@ -53,6 +53,7 @@
                                 <select name="bloom_role" class="w-full rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-200 p-3 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/50" required>
                                     <option value="user" {{ old('bloom_role') == 'user' ? 'selected' : '' }}>User</option>
                                     <option value="admin" {{ old('bloom_role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                                    <option value="moderator" {{ old('bloom_role') == 'moderator' ? 'selected' : '' }}>Moderator</option>
                                 </select>
                                 @error('bloom_role')<p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>@enderror
                             </div>

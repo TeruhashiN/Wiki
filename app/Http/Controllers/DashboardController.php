@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BloomUser;
+use App\Models\News;
 use App\Models\Seed;
 use App\Models\Tool;
 use App\Models\Upload;
@@ -52,6 +53,8 @@ class DashboardController extends Controller
 
         $categories = WikiCategory::orderBy('name')->take(6)->get();
 
-        return view('dashboard', compact('stats', 'trending', 'topRated', 'categories'));
+        $news = News::orderByDesc('date')->take(3)->get();
+
+        return view('dashboard', compact('stats', 'trending', 'topRated', 'categories', 'news'));
     }
 }
