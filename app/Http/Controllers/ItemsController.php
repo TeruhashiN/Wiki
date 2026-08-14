@@ -107,7 +107,7 @@ class ItemsController extends Controller
     {
         $user = auth('bloom')->user();
 
-        if (! $user || ($user->role !== 'admin' && $user->role !== 'moderator'  && $user->role !== 'bloom_user')) {
+        if (! $user || ($user->role !== 'admin' && $user->role !== 'moderator' && $user->role !== 'bloom_user')) {
             abort(403);
         }
     }

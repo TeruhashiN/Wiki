@@ -120,14 +120,6 @@
 
                 {{-- Stats row --}}
                 <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    @php
-                        $stats = [
-                            ['label' => 'Games in Database', 'value' => '1,924', 'icon' => 'game', 'color' => 'text-indigo-400 bg-indigo-500/10 border-indigo-500/20'],
-                            ['label' => 'Registered Players', 'value' => '482K', 'icon' => 'users', 'color' => 'text-purple-400 bg-purple-500/10 border-purple-500/20'],
-                            ['label' => 'Community Reviews', 'value' => '2.1M', 'icon' => 'chat', 'color' => 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20'],
-                            ['label' => 'Total Downloads', 'value' => '38.9M', 'icon' => 'download', 'color' => 'text-amber-400 bg-amber-500/10 border-amber-500/20'],
-                        ];
-                    @endphp
                     @foreach($stats as $stat)
                         <div class="flex items-center gap-4 rounded-xl border border-slate-800 bg-slate-900/50 p-4 sm:p-5 hover:border-slate-700 hover:bg-slate-900 transition-all">
                             <div class="w-11 h-11 shrink-0 rounded-lg border flex items-center justify-center {{ $stat['color'] }}">
@@ -142,7 +134,7 @@
                                 @endif
                             </div>
                             <div class="min-w-0">
-                                <p class="text-xl sm:text-2xl font-black text-white">{{ $stat['value'] }}</p>
+                                <p class="text-xl sm:text-2xl font-black text-white">{{ number_format($stat['value']) }}</p>
                                 <p class="text-xs text-slate-500 truncate">{{ $stat['label'] }}</p>
                             </div>
                         </div>
@@ -152,33 +144,32 @@
                 {{-- Trending games grid + Top rated --}}
                 <div class="grid xl:grid-cols-3 gap-6 lg:gap-8">
 
-                    {{-- Trending games --}}
+                    {{-- Latest Items --}}
                     <section class="xl:col-span-2">
                         <div class="flex items-center justify-between mb-4">
                             <h2 class="flex items-center gap-2 text-lg font-bold text-white">
                                 <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25l-2.25 3-2.25 3H3v-6zM3 12h7.5l2.25 3 2.25 3H3v-6z"/></svg>
-                                Trending Now
+                                Latest Items
                             </h2>
-                            <a href="#" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition-colors">View All →</a>
+                            <a href="{{ route('items') }}" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition-colors">View All →</a>
                         </div>
 
                         <div class="grid sm:grid-cols-2 gap-4">
                             @php
-                                $games = [
-                                    ['title' => 'Cyberstorm 2077', 'genre' => 'Action RPG', 'rating' => '9.2', 'platforms' => ['PC', 'PS5'], 'gradient' => 'from-cyan-500 via-blue-600 to-indigo-700', 'badge' => 'HOT'],
-                                    ['title' => 'Shadow of the Void', 'genre' => 'Adventure', 'rating' => '8.9', 'platforms' => ['PC', 'Xbox'], 'gradient' => 'from-purple-500 via-fuchsia-600 to-pink-700', 'badge' => null],
-                                    ['title' => 'Neon Drift: Turbo', 'genre' => 'Racing', 'rating' => '8.5', 'platforms' => ['PS5', 'Switch'], 'gradient' => 'from-orange-500 via-red-500 to-rose-600', 'badge' => 'NEW'],
-                                    ['title' => 'Kingdom Tactics III', 'genre' => 'Strategy', 'rating' => '9.0', 'platforms' => ['PC'], 'gradient' => 'from-emerald-500 via-teal-600 to-cyan-700', 'badge' => null],
+                                $gradients = [
+                                    'from-cyan-500 via-blue-600 to-indigo-700',
+                                    'from-purple-500 via-fuchsia-600 to-pink-700',
+                                    'from-orange-500 via-red-500 to-rose-600',
+                                    'from-emerald-500 via-teal-600 to-cyan-700',
                                 ];
                             @endphp
-                            @foreach($games as $game)
-                                <a href="#" class="group relative overflow-hidden rounded-xl border border-slate-800 bg-slate-900 hover:border-slate-600 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-900/20">
-                                    {{-- Cover art (gradient) --}}
-                                    <div class="relative h-32 bg-gradient-to-br {{ $game['gradient'] }} overflow-hidden">
-                                        <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22none%22/><circle cx=%2220%22 cy=%2220%22 r=%223%22 fill=%22white%22/><circle cx=%2280%22 cy=%2270%22 r=%224%22 fill=%22white%22/><circle cx=%2250%22 cy=%2285%22 r=%222%22 fill=%22white%22/></svg>');"></div>
-                                        @if($game['badge'])
-                                            <span class="absolute top-3 left-3 text-[10px] font-black px-2 py-1 rounded-md bg-white/15 backdrop-blur border border-white/30 text-white">{{ $game['badge'] }}</span>
+                            @foreach($trending as $i => $game)
+                                <a href="{{ route('uploads.show', $game->id) }}" class="group relative overflow-hidden rounded-xl border border-slate-800 bg-slate-900 hover:border-slate-600 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-900/20">
+                                    <div class="relative h-32 bg-gradient-to-br {{ $gradients[$i % 4] }} overflow-hidden">
+                                        @if($game->image)
+                                            <img src="{{ asset('storage/'.$game->image) }}" alt="{{ $game->name }}" class="absolute inset-0 w-full h-full object-cover">
                                         @endif
+                                        <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22none%22/><circle cx=%2220%22 cy=%2220%22 r=%223%22 fill=%22white%22/><circle cx=%2280%22 cy=%2270%22 r=%224%22 fill=%22white%22/><circle cx=%2250%22 cy=%2285%22 r=%222%22 fill=%22white%22/></svg>');"></div>
                                         <div class="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-slate-950/70 backdrop-blur flex items-center justify-center opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all">
                                             <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z"/></svg>
                                         </div>
@@ -187,19 +178,16 @@
                                     <div class="p-4">
                                         <div class="flex items-start justify-between gap-2">
                                             <div class="min-w-0">
-                                                <h3 class="font-bold text-white text-sm truncate group-hover:text-indigo-300 transition-colors">{{ $game['title'] }}</h3>
-                                                <p class="text-xs text-slate-500 mt-0.5">{{ $game['genre'] }}</p>
+                                                <h3 class="font-bold text-white text-sm truncate group-hover:text-indigo-300 transition-colors">{{ $game->name }}</h3>
+                                                <p class="text-xs text-slate-500 mt-0.5">{{ $game->category?->name ?? 'Uncategorized' }}</p>
                                             </div>
-                                            <span class="flex items-center gap-1 text-xs font-bold text-amber-400 shrink-0">
-                                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
-                                                {{ $game['rating'] }}
-                                            </span>
+                                            @if($game->price)
+                                                <span class="flex items-center gap-1 text-xs font-bold text-emerald-400 shrink-0">
+                                                    ${{ number_format($game->price, 2) }}
+                                                </span>
+                                            @endif
                                         </div>
-                                        <div class="mt-3 flex flex-wrap gap-1.5">
-                                            @foreach($game['platforms'] as $plat)
-                                                <span class="text-[10px] font-semibold text-slate-400 bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5">{{ $plat }}</span>
-                                            @endforeach
-                                        </div>
+                                        <p class="mt-2 text-[11px] text-slate-500 line-clamp-2">{{ $game->description ?? 'No description available.' }}</p>
                                     </div>
                                 </a>
                             @endforeach
@@ -213,38 +201,39 @@
                                 <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
                                 Top Rated
                             </h2>
-                            <a href="#" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition-colors">See All →</a>
+                            <a href="{{ route('items') }}" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition-colors">See All →</a>
                         </div>
 
                         <div class="rounded-xl border border-slate-800 bg-slate-900/50 divide-y divide-slate-800/70">
                             @php
-                                $top = [
-                                    ['rank' => 1, 'title' => 'The Witcher\'s of Valor', 'rating' => '9.7', 'gradient' => 'from-emerald-500 to-teal-600'],
-                                    ['rank' => 2, 'title' => 'Gods of War Ragnarok', 'rating' => '9.6', 'gradient' => 'from-red-500 to-rose-600'],
-                                    ['rank' => 3, 'title' => 'Elden Horizons', 'rating' => '9.5', 'gradient' => 'from-indigo-500 to-purple-600'],
-                                    ['rank' => 4, 'title' => 'Baldur\'s Gate of Legends', 'rating' => '9.3', 'gradient' => 'from-amber-500 to-orange-600'],
-                                    ['rank' => 5, 'title' => 'Final Fantasy Reborn', 'rating' => '9.2', 'gradient' => 'from-sky-500 to-blue-600'],
+                                $topGradients = [
+                                    'from-emerald-500 to-teal-600',
+                                    'from-red-500 to-rose-600',
+                                    'from-indigo-500 to-purple-600',
+                                    'from-amber-500 to-orange-600',
+                                    'from-sky-500 to-blue-600',
                                 ];
                             @endphp
-                            @foreach($top as $t)
-                                <a href="#" class="flex items-center gap-3 p-3 hover:bg-slate-800/50 transition-colors group">
-                                    <span class="w-7 h-7 shrink-0 rounded-lg bg-gradient-to-br {{ $t['gradient'] }} flex items-center justify-center text-white text-xs font-black shadow-md">{{ $t['rank'] }}</span>
+                            @foreach($topRated as $i => $t)
+                                <a href="{{ route('uploads.show', $t->id) }}" class="flex items-center gap-3 p-3 hover:bg-slate-800/50 transition-colors group">
+                                    <span class="w-7 h-7 shrink-0 rounded-lg bg-gradient-to-br {{ $topGradients[$i % 5] }} flex items-center justify-center text-white text-xs font-black shadow-md">{{ $i + 1 }}</span>
                                     <span class="flex-1 min-w-0">
-                                        <span class="block text-sm font-semibold text-white truncate group-hover:text-indigo-300 transition-colors">{{ $t['title'] }}</span>
-                                        <span class="block text-[11px] text-slate-500">Action RPG</span>
+                                        <span class="block text-sm font-semibold text-white truncate group-hover:text-indigo-300 transition-colors">{{ $t->name }}</span>
+                                        <span class="block text-[11px] text-slate-500">{{ $t->category?->name ?? 'Uncategorized' }}</span>
                                     </span>
-                                    <span class="flex items-center gap-1 text-xs font-bold text-amber-400 shrink-0">
-                                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
-                                        {{ $t['rating'] }}
-                                    </span>
+                                    @if($t->price)
+                                        <span class="flex items-center gap-1 text-xs font-bold text-emerald-400 shrink-0">
+                                            ${{ number_format($t->price, 2) }}
+                                        </span>
+                                    @endif
                                 </a>
                             @endforeach
                         </div>
 
-                        {{-- Quick genre filter pills --}}
+                        {{-- Quick category filter pills --}}
                         <div class="mt-4 flex flex-wrap gap-2">
-                            @foreach(['Action', 'RPG', 'Shooter', 'Strategy', 'Racing', 'Indie'] as $g)
-                                <a href="#" class="text-xs font-semibold text-slate-400 bg-slate-900 border border-slate-800 hover:border-indigo-500 hover:text-white hover:bg-indigo-500/10 rounded-full px-3 py-1.5 transition-colors">{{ $g }}</a>
+                            @foreach($categories as $category)
+                                <a href="{{ route('categories.show', $category->slug) }}" class="text-xs font-semibold text-slate-400 bg-slate-900 border border-slate-800 hover:border-indigo-500 hover:text-white hover:bg-indigo-500/10 rounded-full px-3 py-1.5 transition-colors">{{ $category->name }}</a>
                             @endforeach
                         </div>
                     </section>
