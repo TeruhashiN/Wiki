@@ -55,4 +55,34 @@ class AuthController extends Controller
 
         return redirect()->route('dashboard');
     }
+
+    /**
+     * Show the change password form.
+     */
+    public function showChangePassword(): View
+    {
+        return view('auth.change-password');
+    }
+
+    /**
+     * Update the user's password.
+     */
+    public function updatePassword(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'current_password' => ['required', 'string'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+        ]);
+
+        $user = Auth::guard('bloom')->user();
+
+        if (! hash_equals((string) $user->bloom_password, $request->current_password)) {
+            return back()->withErrors(['current_password' => 'The provided password does not match our records.']);
+        }
+
+        $user->bloom_password = $request->password;
+        $user->save();
+
+        return redirect()->route('account.settings')->with('status', 'Password updated successfully.');
+    }
 }
