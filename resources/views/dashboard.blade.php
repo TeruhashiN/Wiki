@@ -141,9 +141,9 @@
                             @foreach($trending as $i => $game)
                                 <a href="{{ route('uploads.show', $game->id) }}" class="group relative overflow-hidden rounded-xl border border-slate-800 bg-slate-900 hover:border-slate-600 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-indigo-900/20">
                                     <div class="relative h-32 bg-gradient-to-br {{ $gradients[$i % 4] }} overflow-hidden">
-                                        @if($game->image)
-                                            <img src="{{ asset('storage/'.$game->image) }}" alt="{{ $game->name }}" class="absolute inset-0 w-full h-full object-cover">
-                                        @endif
+                                         @if($game->image)
+                                             <img src="{{ asset('storage/'.$game->image) }}" alt="{{ $game->name }}" class="absolute inset-0 w-full h-full object-contain object-center z-10">
+                                         @endif
                                         <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22none%22/><circle cx=%2220%22 cy=%2220%22 r=%223%22 fill=%22white%22/><circle cx=%2280%22 cy=%2270%22 r=%224%22 fill=%22white%22/><circle cx=%2250%22 cy=%2285%22 r=%222%22 fill=%22white%22/></svg>');"></div>
                                         <div class="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-slate-950/70 backdrop-blur flex items-center justify-center opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all">
                                             <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z"/></svg>

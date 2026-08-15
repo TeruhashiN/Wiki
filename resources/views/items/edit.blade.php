@@ -102,13 +102,13 @@
 
                                     <div>
                                         <label class="block text-xs font-semibold text-slate-300 mb-2">Quality</label>
-                                        <input type="text" name="seed[quality]" value="{{ old('seed.quality', $upload->seed->quality ?? '') }}" placeholder="e.g. Normal, Silver, Gold" class="w-full rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-200 p-3 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/50">
+                                        <input type="text" name="seed[quality]" value="{{ old('seed.quality', $upload->seed->quality ?? '') }}" placeholder="e.g. 50" class="w-full rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-200 p-3 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/50">
                                         @error('seed.quality')<p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>@enderror
                                     </div>
 
                                     <div>
                                         <label class="block text-xs font-semibold text-slate-300 mb-2">Merit Event</label>
-                                        <input type="text" name="seed[merit_event]" value="{{ old('seed.merit_event', $upload->seed->merit_event ?? '') }}" placeholder="e.g. Harvest Moon Festival" class="w-full rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-200 p-3 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/50">
+                                        <input type="text" name="seed[merit_event]" value="{{ old('seed.merit_event', $upload->seed->merit_event ?? '') }}" placeholder="e.g. -10 Rainy, +10 Sunny" class="w-full rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-200 p-3 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/50">
                                         @error('seed.merit_event')<p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>@enderror
                                     </div>
                                 </div>
