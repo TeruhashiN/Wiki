@@ -12,12 +12,13 @@ Route::middleware(['admin'])->group(function () {
     Route::get('/admin/users', [AdminController::class, 'index'])->name('admin.users');
     Route::post('/admin/users', [AdminController::class, 'store'])->name('admin.users.store');
     Route::post('/news', [ItemsController::class, 'storeNews'])->name('news.store');
-    Route::get('/news', [ItemsController::class, 'indexNews'])->name('news.index');
-    Route::get('/news/{id}', [ItemsController::class, 'showNews'])->name('news.show');
     Route::get('/news/{id}/edit', [ItemsController::class, 'editNews'])->name('news.edit');
     Route::put('/news/{id}', [ItemsController::class, 'updateNews'])->name('news.update');
     Route::delete('/news/{id}', [ItemsController::class, 'destroyNews'])->name('news.destroy');
 });
+
+Route::get('/news', [ItemsController::class, 'indexNews'])->name('news.index');
+Route::get('/news/{id}', [ItemsController::class, 'showNews'])->name('news.show');
 
 Route::get('/items', [ItemsController::class, 'index'])->name('items');
 Route::get('/items/upload', [ItemsController::class, 'create'])->name('items.upload');

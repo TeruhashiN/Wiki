@@ -44,76 +44,50 @@
 
                     <div class="relative p-6 sm:p-10 lg:p-12 grid lg:grid-cols-2 gap-8 items-center">
                         <div>
-                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/15 border border-indigo-400/30 text-indigo-300 text-xs font-semibold mb-4">
-                                <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
-                                GAME OF THE WEEK
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs font-semibold mb-4">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                NEWS OF THE WEEK
                             </div>
                             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight">
-                                Eldoria: <span class="bg-gradient-to-r from-indigo-400 via-purple-400 to-fuchsia-400 bg-clip-text text-transparent">Shattered Realms</span>
+                                <a href="{{ route('news.show', $newsOfTheWeek->id) }}" class="hover:text-emerald-300 transition-colors">
+                                    {{ $newsOfTheWeek->title }}
+                                </a>
                             </h1>
                             <p class="mt-4 text-slate-400 text-sm sm:text-base leading-relaxed max-w-lg">
-                                A breathtaking open-world RPG where ancient kingdoms collide. Forge alliances, master forbidden magic, and shape the fate of Eldoria across a sprawling 200-hour campaign.
+                                {{ $newsOfTheWeek->description }}
                             </p>
 
                             <div class="mt-5 flex flex-wrap items-center gap-3">
-                                <span class="flex items-center gap-1 text-sm font-semibold text-white">
-                                    <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
-                                    9.4
+                                <span class="text-xs text-slate-500 font-medium px-2 py-1 rounded-md bg-slate-800/80 border border-slate-700">
+                                    {{ $newsOfTheWeek->date->format('M d, Y') }}
                                 </span>
-                                <span class="text-xs text-slate-500 font-medium px-2 py-1 rounded-md bg-slate-800/80 border border-slate-700">RPG</span>
-                                <span class="text-xs text-slate-500 font-medium px-2 py-1 rounded-md bg-slate-800/80 border border-slate-700">Open World</span>
-                                <span class="text-xs text-slate-500 font-medium px-2 py-1 rounded-md bg-slate-800/80 border border-slate-700">PC</span>
-                                <span class="text-xs text-slate-500 font-medium px-2 py-1 rounded-md bg-slate-800/80 border border-slate-700">PS5</span>
-                                <span class="text-xs text-slate-500 font-medium px-2 py-1 rounded-md bg-slate-800/80 border border-slate-700">Xbox</span>
+                                @if($newsOfTheWeek->news_by)
+                                    <span class="text-xs text-slate-500 font-medium px-2 py-1 rounded-md bg-slate-800/80 border border-slate-700">
+                                        By {{ $newsOfTheWeek->news_by }}
+                                    </span>
+                                @endif
                             </div>
 
                             <div class="mt-6 flex flex-wrap gap-3">
-                                <a href="#" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 transition-all shadow-xl shadow-indigo-600/30">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z"/></svg>
-                                    Play Now
+                                <a href="{{ route('news.show', $newsOfTheWeek->id) }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 transition-all shadow-xl shadow-emerald-600/30">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg>
+                                    Read Article
                                 </a>
-                                <a href="#" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 transition-all">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
-                                    Add to Library
+                                <a href="{{ route('news.index') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold text-white bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 transition-all">
+                                    All News
                                 </a>
                             </div>
                         </div>
 
-                        {{-- Hero visual / stats cards --}}
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="col-span-2 rounded-xl border border-slate-700/50 bg-slate-900/60 backdrop-blur p-4">
-                                <div class="flex items-center justify-between mb-3">
-                                    <p class="text-xs font-semibold uppercase tracking-widest text-slate-500">Player Count</p>
-                                    <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full">LIVE</span>
+                        {{-- Hero visual --}}
+                        <div class="relative rounded-xl border border-slate-700/50 bg-slate-900/60 backdrop-blur overflow-hidden">
+                            @if($newsOfTheWeek->image)
+                                <img src="{{ asset('storage/'.$newsOfTheWeek->image) }}" alt="{{ $newsOfTheWeek->title }}" class="w-full h-64 object-cover">
+                            @else
+                                <div class="h-64 bg-gradient-to-br from-emerald-600 to-teal-700 flex items-center justify-center">
+                                    <svg class="w-16 h-16 text-white/30" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg>
                                 </div>
-                                <div class="flex items-end gap-1 h-16">
-                                    @php
-                                        $bars = [35, 55, 45, 70, 60, 85, 75, 95, 82, 100, 88, 92];
-                                    @endphp
-                                    @foreach($bars as $i => $h)
-                                        <div class="flex-1 rounded-t bg-gradient-to-t from-indigo-600 to-purple-400 opacity-70 hover:opacity-100 transition-opacity" style="height: {{ $h }}%;"></div>
-                                    @endforeach
-                                </div>
-                                <p class="mt-3 text-sm text-slate-400"><span class="text-white font-bold text-lg">2.4M</span> playing right now</p>
-                            </div>
-
-                            <div class="rounded-xl border border-slate-700/50 bg-slate-900/60 backdrop-blur p-4">
-                                <p class="text-xs font-semibold uppercase tracking-widest text-slate-500">Rating</p>
-                                <div class="mt-2 flex items-center gap-1">
-                                    <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
-                                    <span class="text-2xl font-black text-white">9.4</span>
-                                </div>
-                                <p class="mt-1 text-xs text-slate-500">Based on 128K reviews</p>
-                            </div>
-
-                            <div class="rounded-xl border border-slate-700/50 bg-slate-900/60 backdrop-blur p-4">
-                                <p class="text-xs font-semibold uppercase tracking-widest text-slate-500">Metascore</p>
-                                <div class="mt-2 flex items-center gap-1">
-                                    <span class="w-8 h-8 rounded-md bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 text-sm font-black">94</span>
-                                    <span class="text-xs text-slate-500 ml-1">Must-Play</span>
-                                </div>
-                                <p class="mt-2 text-xs text-slate-500">#1 this week</p>
-                            </div>
+                            @endif
                         </div>
                     </div>
                 </section>
@@ -199,7 +173,7 @@
                         <div class="flex items-center justify-between mb-4">
                             <h2 class="flex items-center gap-2 text-lg font-bold text-white">
                                 <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>
-                                Top Rated
+                                Top Items
                             </h2>
                             <a href="{{ route('items') }}" class="text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition-colors">See All →</a>
                         </div>
