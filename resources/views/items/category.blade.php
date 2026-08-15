@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="h-full bg-slate-950">
 <head>
+    <link rel="icon" href="{{ asset('bloom.ico') }}" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $category->name }} — BloomCity Wiki</title>

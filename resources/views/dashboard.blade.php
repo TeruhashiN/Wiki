@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="h-full bg-slate-950">
 <head>
+    <link rel="icon" href="{{ asset('bloom.ico') }}" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -82,7 +83,7 @@
                         {{-- Hero visual --}}
                         <div class="relative rounded-xl border border-slate-700/50 bg-slate-900/60 backdrop-blur overflow-hidden">
                             @if($newsOfTheWeek->image)
-                                <img src="{{ asset('storage/'.$newsOfTheWeek->image) }}" alt="{{ $newsOfTheWeek->title }}" class="w-full h-64 object-cover">
+                                <img src="{{ asset('storage/'.$newsOfTheWeek->image) }}" alt="{{ $newsOfTheWeek->title }}" class="w-full h-64 object-contain">
                             @else
                                 <div class="h-64 bg-gradient-to-br from-emerald-600 to-teal-700 flex items-center justify-center">
                                     <svg class="w-16 h-16 text-white/30" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg>
@@ -228,7 +229,7 @@
                             <a href="{{ route('news.show', $n->id) }}" class="group rounded-xl overflow-hidden border border-slate-800 bg-slate-900/50 hover:border-slate-600 transition-all hover:-translate-y-0.5">
                                 <div class="h-24 bg-gradient-to-br from-indigo-600 to-purple-700 relative">
                                     @if($n->image)
-                                        <img src="{{ asset('storage/'.$n->image) }}" alt="{{ $n->title }}" class="absolute inset-0 w-full h-full object-cover">
+                                        <img src="{{ asset('storage/'.$n->image) }}" alt="{{ $n->title }}" class="absolute inset-0 w-full h-full object-contain">
                                     @endif
                                     <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22none%22/><circle cx=%2225%22 cy=%2225%22 r=%222%22 fill=%22white%22/><circle cx=%2275%22 cy=%2275%22 r=%222%22 fill=%22white%22/></svg>');"></div>
                                     <span class="absolute top-3 left-3 text-[10px] font-bold px-2 py-0.5 rounded bg-slate-950/60 backdrop-blur border border-white/20 text-white">News</span>

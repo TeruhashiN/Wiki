@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="h-full bg-slate-950">
 <head>
+    <link rel="icon" href="{{ asset('bloom.ico') }}" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $newsItem->title }} — BloomCity Wiki</title>
@@ -29,7 +30,7 @@
 
                     <div class="mt-6 rounded-2xl border border-slate-800 bg-slate-900/50 overflow-hidden">
                         @if($newsItem->image)
-                            <img src="{{ asset('storage/'.$newsItem->image) }}" alt="{{ $newsItem->title }}" class="w-full h-64 sm:h-80 object-cover">
+                            <img src="{{ asset('storage/'.$newsItem->image) }}" alt="{{ $newsItem->title }}" class="w-full h-64 sm:h-80 object-contain">
                         @endif
 
                         <div class="p-6 sm:p-8">
@@ -64,7 +65,7 @@
                                     <a href="{{ route('news.show', $related->id) }}" class="group rounded-xl overflow-hidden border border-slate-800 bg-slate-900/50 hover:border-slate-600 transition-all hover:-translate-y-0.5">
                                         <div class="h-24 bg-gradient-to-br from-indigo-600 to-purple-700 relative">
                                             @if($related->image)
-                                                <img src="{{ asset('storage/'.$related->image) }}" alt="{{ $related->title }}" class="absolute inset-0 w-full h-full object-cover">
+                                                <img src="{{ asset('storage/'.$related->image) }}" alt="{{ $related->title }}" class="absolute inset-0 w-full h-full object-contain">
                                             @endif
                                             <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22none%22/><circle cx=%2225%22 cy=%2225%22 r=%222%22 fill=%22white%22/><circle cx=%2275%22 cy=%2275%22 r=%222%22 fill=%22white%22/></svg>');"></div>
                                         </div>
