@@ -78,6 +78,7 @@
                         </div>
                     @endif
                 </div>
+                @include('components.footer')
             </main>
         </div>
     </div>

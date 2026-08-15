@@ -55,6 +55,7 @@
                         {{ $newsItems->links() }}
                     </div>
                 </div>
+                @include('components.footer')
             </main>
         </div>
     </div>
