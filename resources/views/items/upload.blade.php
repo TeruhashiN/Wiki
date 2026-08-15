@@ -84,15 +84,15 @@
 
                         @auth('bloom')
                         @if(auth('bloom')->user()->role === 'admin')
-                        <button type="button" id="btnNews" class="action-btn inline-flex items-center gap-3 rounded-xl border border-cyan-500/30 bg-slate-900/80 px-4 py-3 text-left hover:border-cyan-400 hover:shadow-lg hover:shadow-cyan-500/10">
-                            <div class="w-10 h-10 shrink-0 rounded-lg bg-gradient-to-br from-cyan-600 to-sky-600 flex items-center justify-center text-white shadow-md shadow-cyan-500/20">
+                        <button type="button" id="btnCategory" class="action-btn inline-flex items-center gap-3 rounded-xl border border-emerald-500/30 bg-slate-900/80 px-4 py-3 text-left hover:border-emerald-400 hover:shadow-lg hover:shadow-emerald-500/10">
+                            <div class="w-10 h-10 shrink-0 rounded-lg bg-gradient-to-br from-emerald-600 to-teal-600 flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
                                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h.008v.008H12V7.5zm0 3.75h.008v.008H12v-.008zm0 3.75h.008v.008H12v-.008zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             </div>
                             <div>
-                                <h3 class="text-sm font-bold text-white">Add News</h3>
-                                <p class="text-xs text-slate-400 leading-relaxed hidden sm:block">Post an announcement</p>
+                                <h3 class="text-sm font-bold text-white">Add Categories</h3>
+                                <p class="text-xs text-slate-400 leading-relaxed hidden sm:block">Create a new category</p>
                             </div>
-                            <svg class="w-4 h-4 shrink-0 text-cyan-400 ml-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+                            <svg class="w-4 h-4 shrink-0 text-emerald-400 ml-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
                         </button>
                         <button type="button" id="btnManageNews" class="action-btn inline-flex items-center gap-3 rounded-xl border border-rose-500/30 bg-slate-900/80 px-4 py-3 text-left hover:border-rose-400 hover:shadow-lg hover:shadow-rose-500/10">
                             <div class="w-10 h-10 shrink-0 rounded-lg bg-gradient-to-br from-rose-600 to-pink-600 flex items-center justify-center text-white shadow-md shadow-rose-500/20">

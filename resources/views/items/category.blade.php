@@ -84,7 +84,7 @@
                                                         <p class="text-sm font-bold text-white truncate group-hover:text-indigo-300 transition-colors">{{ $upload->name }}</p>
                                                     </div>
                                                     @if($upload->price)
-                                                        <p class="mt-1 text-xs font-bold text-emerald-400">${{ number_format($upload->price, 2) }}</p>
+                                                         <p class="mt-1 text-xs font-bold text-emerald-400">🪙{{ number_format($upload->price, 2) }}</p>
                                                     @endif
                                                 </div>
                                             </div>

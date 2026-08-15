@@ -54,7 +54,7 @@
                                     </div>
                                     <div>
                                         <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Price</p>
-                                        <p class="text-xl font-black text-emerald-400">${{ number_format($upload->price, 2) }}</p>
+                                        <p class="text-xl font-black text-emerald-400">🪙{{ number_format($upload->price, 2) }}</p>
                                     </div>
                                 </div>
                             </section>
@@ -90,7 +90,7 @@
                                         </tr>
                                         <tr>
                                             <td class="py-2 text-slate-500 font-semibold">Price</td>
-                                            <td class="py-2 text-slate-200">{{ $upload->price ? '$' . number_format($upload->price, 2) : '—' }}</td>
+                                            <td class="py-2 text-slate-200">{{ $upload->price ? '🪙' . number_format($upload->price, 2) : '—' }}</td>
                                         </tr>
                                         @if($upload->category && $upload->category->slug === 'seeds' && $upload->seed)
                                             <tr>

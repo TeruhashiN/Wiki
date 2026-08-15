@@ -157,7 +157,7 @@
                                             </div>
                                             @if($game->price)
                                                 <span class="flex items-center gap-1 text-xs font-bold text-emerald-400 shrink-0">
-                                                    ${{ number_format($game->price, 2) }}
+                                                     🪙{{ number_format($game->price, 2) }}
                                                 </span>
                                             @endif
                                         </div>
@@ -197,7 +197,7 @@
                                     </span>
                                     @if($t->price)
                                         <span class="flex items-center gap-1 text-xs font-bold text-emerald-400 shrink-0">
-                                            ${{ number_format($t->price, 2) }}
+                                             🪙{{ number_format($t->price, 2) }}
                                         </span>
                                     @endif
                                 </a>
