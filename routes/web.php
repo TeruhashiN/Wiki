@@ -20,6 +20,8 @@ Route::middleware(['admin'])->group(function () {
 Route::get('/news', [ItemsController::class, 'indexNews'])->name('news.index');
 Route::get('/news/{id}', [ItemsController::class, 'showNews'])->name('news.show');
 
+Route::get('/search', [ItemsController::class, 'search'])->name('search');
+
 Route::get('/items', [ItemsController::class, 'index'])->name('items');
 Route::get('/items/upload', [ItemsController::class, 'create'])->name('items.upload');
 Route::post('/items', [ItemsController::class, 'store'])->name('items.store');

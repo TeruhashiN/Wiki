@@ -251,6 +251,32 @@ class ItemsController extends Controller
         return $slug === 'tools';
     }
 
+    public function search(): View
+    {
+        $query = request()->query('q', '');
+
+        $uploadsQuery = Upload::with('category')
+            ->where(function ($q) use ($query) {
+                $q->where('name', 'like', '%'.$query.'%')
+                  ->orWhere('description', 'like', '%'.$query.'%');
+            });
+
+        $uploads = $uploadsQuery->get();
+
+        $newsQuery = News::where(function ($q) use ($query) {
+            $q->where('title', 'like', '%'.$query.'%')
+              ->orWhere('description', 'like', '%'.$query.'%');
+        });
+
+        $news = $newsQuery->orderByDesc('date')->get();
+
+        return view('search', [
+            'query' => $query,
+            'uploads' => $uploads,
+            'news' => $news,
+        ]);
+    }
+
     public function show(string $slug): View
     {
         $category = WikiCategory::where('slug', $slug)->firstOrFail();
