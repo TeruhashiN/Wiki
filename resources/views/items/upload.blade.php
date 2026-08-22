@@ -351,6 +351,14 @@
                                     @error('price')<p class="mt-1.5 text-xs text-red-400">{{ $message }}</p>@enderror
                                 </div>
 
+                                @auth('bloom')
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-300 mb-2">Added By</label>
+                                    <input type="text" value="{{ auth('bloom')->user()->username ?? auth('bloom')->user()->getUsernameAttribute() }}" class="w-full rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-200 p-3 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/50" readonly>
+                                    <input type="hidden" name="added_by" value="{{ auth('bloom')->id() }}">
+                                </div>
+                                @endauth
+
                                 {{-- Seed-specific fields (shown when Category = Seeds) --}}
                                 <div id="seedFields" class="hidden">
                                     <div class="rounded-xl border border-slate-800 bg-slate-900/40 p-4 space-y-4">
@@ -418,3 +426,5 @@
             </main>
         </div>
     </div>
+</body>
+</html>

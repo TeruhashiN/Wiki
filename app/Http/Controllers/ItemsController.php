@@ -68,6 +68,8 @@ class ItemsController extends Controller
         unset($validated['seed']);
         unset($validated['tool']);
 
+        $validated['added_by'] = auth('bloom')->id();
+
         $upload = Upload::create($validated);
 
         if ($this->isSeedsCategory($validated['category_id'])) {
@@ -295,7 +297,7 @@ class ItemsController extends Controller
 
     public function showUpload(string $id): View
     {
-        $upload = Upload::with(['category', 'seed', 'tool'])->findOrFail($id);
+        $upload = Upload::with(['category', 'seed', 'tool', 'addedBy'])->findOrFail($id);
         $relatedUploads = Upload::where('category_id', $upload->category_id)
             ->where('id', '!=', $upload->id)
             ->orderBy('name')

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\BloomUser;
 use Illuminate\Database\Eloquent\Model;
 
 class Upload extends Model
@@ -16,6 +17,7 @@ class Upload extends Model
         'name',
         'description',
         'price',
+        'added_by',
     ];
 
     protected $casts = [
@@ -35,5 +37,10 @@ class Upload extends Model
     public function tool()
     {
         return $this->hasOne(Tool::class, 'upload_id');
+    }
+
+    public function addedBy()
+    {
+        return $this->belongsTo(BloomUser::class, 'added_by');
     }
 }
