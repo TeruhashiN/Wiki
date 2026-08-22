@@ -23,14 +23,19 @@ Route::get('/news/{id}', [ItemsController::class, 'showNews'])->name('news.show'
 Route::get('/search', [ItemsController::class, 'search'])->name('search');
 
 Route::get('/items', [ItemsController::class, 'index'])->name('items');
-Route::get('/items/upload', [ItemsController::class, 'create'])->name('items.upload');
-Route::post('/items', [ItemsController::class, 'store'])->name('items.store');
+Route::middleware(['auth:bloom'])->group(function () {
+    Route::get('/items/upload', [ItemsController::class, 'create'])->name('items.upload');
+    Route::post('/items', [ItemsController::class, 'store'])->name('items.store');
+});
 Route::post('/categories', [ItemsController::class, 'storeCategory'])->name('categories.store');
 Route::get('/categories/{slug}', [ItemsController::class, 'show'])->name('categories.show');
 Route::get('/uploads/{id}', [ItemsController::class, 'showUpload'])->name('uploads.show');
 Route::get('/uploads/{id}/edit', [ItemsController::class, 'edit'])->name('uploads.edit');
 Route::put('/uploads/{id}', [ItemsController::class, 'update'])->name('uploads.update');
 Route::delete('/uploads/{id}', [ItemsController::class, 'destroy'])->name('uploads.destroy');
+Route::get('/items/pending', [ItemsController::class, 'pendingIndex'])->name('items.pending');
+Route::post('/uploads/{id}/accept', [ItemsController::class, 'acceptUpload'])->name('uploads.accept');
+Route::delete('/uploads/{id}/reject', [ItemsController::class, 'rejectUpload'])->name('uploads.reject');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');

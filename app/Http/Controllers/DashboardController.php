@@ -12,6 +12,9 @@ class DashboardController extends Controller
 {
     public function __invoke(): View
     {
+        $user = auth('bloom')->user();
+        $isAdmin = $user && $user->role === 'admin';
+
         $stats = [
             [
                 'label' => 'Wiki Categories',
@@ -39,15 +42,16 @@ class DashboardController extends Controller
             ],
         ];
 
-        $trending = Upload::with('category')
-            ->latest()
-            ->take(4)
-            ->get();
+        $trendingQuery = Upload::with('category')->latest();
+        $topRatedQuery = Upload::with('category')->orderByDesc('price');
 
-        $topRated = Upload::with('category')
-            ->orderByDesc('price')
-            ->take(5)
-            ->get();
+        if (! $isAdmin) {
+            $trendingQuery->where('status', 'accepted');
+            $topRatedQuery->where('status', 'accepted');
+        }
+
+        $trending = $trendingQuery->take(4)->get();
+        $topRated = $topRatedQuery->take(5)->get();
 
         $categories = WikiCategory::orderBy('name')->take(6)->get();
 

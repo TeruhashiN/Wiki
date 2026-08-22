@@ -13,7 +13,14 @@ class ItemsController extends Controller
     public function index(): View
     {
         $categories = WikiCategory::orderBy('name')->get();
-        $uploads = Upload::with('category')->get();
+        $user = auth('bloom')->user();
+        $uploadsQuery = Upload::with('category');
+
+        if (! $user || $user->role !== 'admin') {
+            $uploadsQuery->where('status', 'accepted');
+        }
+
+        $uploads = $uploadsQuery->get();
 
         return view('components.items', [
             'categories' => $categories,
@@ -23,8 +30,6 @@ class ItemsController extends Controller
 
     public function create(): View
     {
-        $this->ensureModeratorOrAdmin();
-
         $categories = WikiCategory::orderBy('name')->get();
         $search = request()->query('search');
         $uploadsQuery = Upload::with('category')->orderBy('name');
@@ -53,8 +58,6 @@ class ItemsController extends Controller
 
     public function store(): RedirectResponse
     {
-        $this->ensureModeratorOrAdmin();
-
         $validated = request()->validate(array_merge($this->itemRules(), $this->seedRules(), $this->toolRules()));
 
         $seedData = $validated['seed'] ?? [];
@@ -69,6 +72,7 @@ class ItemsController extends Controller
         unset($validated['tool']);
 
         $validated['added_by'] = auth('bloom')->id();
+        $validated['status'] = 'pending';
 
         $upload = Upload::create($validated);
 
@@ -80,7 +84,7 @@ class ItemsController extends Controller
             $upload->tool()->create($toolData);
         }
 
-        return back()->with('status', 'Item uploaded successfully.');
+        return back()->with('status', 'Item uploaded successfully. Pending admin approval.');
     }
 
     public function storeCategory(): RedirectResponse
@@ -256,18 +260,23 @@ class ItemsController extends Controller
     public function search(): View
     {
         $query = request()->query('q', '');
+        $user = auth('bloom')->user();
 
         $uploadsQuery = Upload::with('category')
             ->where(function ($q) use ($query) {
                 $q->where('name', 'like', '%'.$query.'%')
-                  ->orWhere('description', 'like', '%'.$query.'%');
+                    ->orWhere('description', 'like', '%'.$query.'%');
             });
+
+        if (! $user || $user->role !== 'admin') {
+            $uploadsQuery->where('status', 'accepted');
+        }
 
         $uploads = $uploadsQuery->get();
 
         $newsQuery = News::where(function ($q) use ($query) {
             $q->where('title', 'like', '%'.$query.'%')
-              ->orWhere('description', 'like', '%'.$query.'%');
+                ->orWhere('description', 'like', '%'.$query.'%');
         });
 
         $news = $newsQuery->orderByDesc('date')->get();
@@ -282,7 +291,14 @@ class ItemsController extends Controller
     public function show(string $slug): View
     {
         $category = WikiCategory::where('slug', $slug)->firstOrFail();
-        $uploads = Upload::where('category_id', $category->id)->orderBy('name')->get();
+        $user = auth('bloom')->user();
+        $uploadsQuery = Upload::where('category_id', $category->id)->orderBy('name');
+
+        if (! $user || $user->role !== 'admin') {
+            $uploadsQuery->where('status', 'accepted');
+        }
+
+        $uploads = $uploadsQuery->get();
 
         $grouped = $uploads->groupBy(function ($item) {
             return strtoupper(substr($item->name, 0, 1));
@@ -297,9 +313,18 @@ class ItemsController extends Controller
 
     public function showUpload(string $id): View
     {
-        $upload = Upload::with(['category', 'seed', 'tool', 'addedBy'])->findOrFail($id);
+        $user = auth('bloom')->user();
+        $uploadQuery = Upload::with(['category', 'seed', 'tool', 'addedBy'])->where('id', $id);
+
+        if (! $user || $user->role !== 'admin') {
+            $uploadQuery->where('status', 'accepted');
+        }
+
+        $upload = $uploadQuery->firstOrFail();
+
         $relatedUploads = Upload::where('category_id', $upload->category_id)
             ->where('id', '!=', $upload->id)
+            ->where('status', 'accepted')
             ->orderBy('name')
             ->get();
 
@@ -376,5 +401,44 @@ class ItemsController extends Controller
         $upload->delete();
 
         return back()->with('status', 'Item deleted successfully.');
+    }
+
+    public function pendingIndex(): View
+    {
+        $this->ensureAdmin();
+
+        $pendingUploads = Upload::with(['category', 'addedBy'])
+            ->where('status', 'pending')
+            ->orderByDesc('created_at')
+            ->paginate(20);
+
+        return view('items.pending', [
+            'pendingUploads' => $pendingUploads,
+        ]);
+    }
+
+    public function acceptUpload(string $id): RedirectResponse
+    {
+        $this->ensureAdmin();
+
+        $upload = Upload::findOrFail($id);
+        $upload->update(['status' => 'accepted']);
+
+        return back()->with('status', 'Item accepted successfully.');
+    }
+
+    public function rejectUpload(string $id): RedirectResponse
+    {
+        $this->ensureAdmin();
+
+        $upload = Upload::findOrFail($id);
+
+        if ($upload->image && \Storage::disk('public')->exists($upload->image)) {
+            \Storage::disk('public')->delete($upload->image);
+        }
+
+        $upload->delete();
+
+        return back()->with('status', 'Item rejected and deleted.');
     }
 }

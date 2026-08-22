@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\BloomUser;
 use Illuminate\Database\Eloquent\Model;
 
 class Upload extends Model
@@ -18,6 +17,7 @@ class Upload extends Model
         'description',
         'price',
         'added_by',
+        'status',
     ];
 
     protected $casts = [

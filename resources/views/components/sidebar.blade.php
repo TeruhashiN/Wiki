@@ -84,7 +84,16 @@
             {{-- Section 1: Quick Actions --}}
             <div class="px-2 py-1 text-[10px] font-bold tracking-wider text-slate-500 uppercase" role="presentation">Actions</div>
 
-            @if ($isAdmin || $bloomUser->role === 'moderator' || $bloomUser->role === 'bloom_user')
+            @if ($isAdmin)
+            <a href="{{ route('items.pending') }}" role="menuitem" tabindex="-1"
+                class="dropdown-item flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium text-amber-300 hover:text-white hover:bg-slate-800 transition-colors">
+                <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Pending Items
+            </a>
+            @endif
+
             <a href="{{ route('items.upload') }}" role="menuitem" tabindex="-1"
                 class="dropdown-item flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-colors">
                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -92,7 +101,6 @@
                 </svg>
                 Upload Item
             </a>
-            @endif
 
             @if ($isAdmin)
             <a href="{{ route('admin.users') }}" role="menuitem" tabindex="-1"

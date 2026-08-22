@@ -9,16 +9,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::connection('bloom')->table('uploads', function (Blueprint $table) {
-            $table->integer('added_by')->nullable()->after('price');
-            $table->foreign('added_by')->references('id')->on('bloom_user')->nullOnDelete();
+            $table->string('status')->default('pending')->after('added_by');
         });
     }
 
     public function down(): void
     {
         Schema::connection('bloom')->table('uploads', function (Blueprint $table) {
-            $table->dropForeign(['added_by']);
-            $table->dropColumn('added_by');
+            $table->dropColumn('status');
         });
     }
 };
