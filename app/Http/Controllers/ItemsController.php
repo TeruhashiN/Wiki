@@ -72,7 +72,15 @@ class ItemsController extends Controller
         unset($validated['tool']);
 
         $validated['added_by'] = auth('bloom')->id();
-        $validated['status'] = 'pending';
+
+        $user = auth('bloom')->user();
+        if ($user && in_array($user->role, ['admin', 'moderator'])) {
+            $validated['status'] = 'accepted';
+            $statusMessage = 'Item uploaded successfully.';
+        } else {
+            $validated['status'] = 'pending';
+            $statusMessage = 'Item uploaded successfully. Pending admin approval.';
+        }
 
         $upload = Upload::create($validated);
 
@@ -84,7 +92,7 @@ class ItemsController extends Controller
             $upload->tool()->create($toolData);
         }
 
-        return back()->with('status', 'Item uploaded successfully. Pending admin approval.');
+        return back()->with('status', $statusMessage);
     }
 
     public function storeCategory(): RedirectResponse

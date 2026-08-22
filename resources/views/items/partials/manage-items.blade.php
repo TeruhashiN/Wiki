@@ -14,6 +14,17 @@
             <p class="text-[11px] text-slate-500">{{ $upload->category->name ?? 'No category' }}</p>
         </div>
         <div class="flex items-center gap-2 shrink-0">
+            @if($upload->status === 'pending')
+                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider text-amber-300 bg-amber-500/10 border border-amber-500/30">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                    Pending
+                </span>
+            @else
+                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider text-emerald-300 bg-emerald-500/10 border border-emerald-500/30">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                    Accepted
+                </span>
+            @endif
             <a href="{{ route('uploads.edit', $upload->id) }}" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 transition-colors">
                 Edit
             </a>

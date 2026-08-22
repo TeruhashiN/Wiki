@@ -192,6 +192,65 @@
                     @endif
                     @endauth
 
+                    {{-- My Recent Uploads --}}
+                    @auth('bloom')
+                    <div id="panelMyUploads" class="panel">
+                        <div class="rounded-2xl border border-slate-700 bg-slate-900/50 p-6 shadow-lg">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-1 h-8 rounded-full bg-gradient-to-b from-indigo-500 to-purple-500"></div>
+                                <div>
+                                    <h2 class="text-lg font-bold text-white">My Recent Uploads</h2>
+                                    <p class="text-xs text-slate-500">Track the status of your uploads.</p>
+                                </div>
+                            </div>
+
+                            <div id="myUploadsList" class="max-h-[360px] overflow-y-auto space-y-2 pr-1">
+                                @php
+                                    $myUploads = \App\Models\Upload::with(['category'])
+                                        ->where('added_by', auth('bloom')->id())
+                                        ->orderByDesc('created_at')
+                                        ->take(20)
+                                        ->get();
+                                @endphp
+                                @forelse($myUploads as $upload)
+                                    <div class="flex items-center gap-3 p-3 rounded-xl border border-slate-800 bg-slate-950/40 hover:border-slate-700 transition-colors">
+                                        <div class="w-10 h-10 shrink-0 rounded-lg overflow-hidden bg-slate-800 border border-slate-700">
+                                            @if($upload->image)
+                                                <img src="{{ asset('storage/' . $upload->image) }}" alt="{{ $upload->name }}" class="w-full h-full object-cover">
+                                            @else
+                                                <div class="w-full h-full flex items-center justify-center text-slate-500">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0 1.125.504 1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-bold text-white truncate">{{ $upload->name }}</p>
+                                            <p class="text-[11px] text-slate-500">{{ $upload->category->name ?? 'No category' }} • {{ $upload->created_at->diffForHumans() }}</p>
+                                        </div>
+                                        <div class="shrink-0">
+                                            @if($upload->status === 'pending')
+                                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider text-amber-300 bg-amber-500/10 border border-amber-500/30">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                                                    Waiting
+                                                </span>
+                                            @else
+                                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider text-emerald-300 bg-emerald-500/10 border border-emerald-500/30">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                                    Accepted
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="text-center py-8">
+                                        <p class="text-sm text-slate-400">You haven't uploaded any items yet.</p>
+                                    </div>
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
+                    @endauth
+
                     {{-- News Form Panel --}}
                     @auth('bloom')
                     @if(in_array(auth('bloom')->user()->role, ['admin', 'moderator']))
@@ -488,5 +547,56 @@
             </main>
         </div>
     </div>
+
+    {{-- Upload Status Modal --}}
+    <div id="uploadStatusModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" id="modalOverlay"></div>
+        <div class="relative w-full max-w-sm rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl text-center">
+            <div id="modalIcon" class="w-16 h-16 mx-auto rounded-full flex items-center justify-center text-3xl mb-4"></div>
+            <h3 id="modalTitle" class="text-lg font-black text-white mb-2"></h3>
+            <p id="modalMessage" class="text-sm text-slate-400 mb-6"></p>
+            <button id="modalCloseBtn" class="w-full py-2.5 rounded-xl text-sm font-bold text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-colors">
+                Close
+            </button>
+        </div>
+    </div>
+
+    @if(session('status'))
+    <script>
+        (function() {
+            const modal = document.getElementById('uploadStatusModal');
+            const modalIcon = document.getElementById('modalIcon');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalMessage = document.getElementById('modalMessage');
+            const modalCloseBtn = document.getElementById('modalCloseBtn');
+            const modalOverlay = document.getElementById('modalOverlay');
+
+            const status = @json(session('status'));
+
+            if (status.toLowerCase().includes('pending')) {
+                modalIcon.className = 'w-16 h-16 mx-auto rounded-full flex items-center justify-center text-3xl mb-4 bg-amber-500/10 border border-amber-500/30';
+                modalIcon.innerHTML = '<svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+                modalTitle.textContent = 'UPLOADED — PENDING';
+                modalMessage.textContent = 'Your item is waiting for admin approval. It will be visible to everyone once accepted.';
+            } else {
+                modalIcon.className = 'w-16 h-16 mx-auto rounded-full flex items-center justify-center text-3xl mb-4 bg-emerald-500/10 border border-emerald-500/30';
+                modalIcon.innerHTML = '<svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>';
+                modalTitle.textContent = 'UPLOADED SUCCESSFULLY';
+                modalMessage.textContent = 'Your item has been published and is now visible to everyone.';
+            }
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            function closeModal() {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+
+            modalCloseBtn.addEventListener('click', closeModal);
+            modalOverlay.addEventListener('click', closeModal);
+        })();
+    </script>
+    @endif
 </body>
 </html>

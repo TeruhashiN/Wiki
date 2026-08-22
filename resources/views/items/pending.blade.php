@@ -41,7 +41,13 @@
                                         @endif
                                     </div>
                                     <div class="flex-1 min-w-0">
-                                        <p class="text-sm font-bold text-white truncate">{{ $upload->name }}</p>
+                                        <div class="flex items-center gap-2">
+                                            <p class="text-sm font-bold text-white truncate">{{ $upload->name }}</p>
+                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider text-amber-300 bg-amber-500/10 border border-amber-500/30 shrink-0">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                                                Waiting
+                                            </span>
+                                        </div>
                                         <p class="text-[11px] text-slate-500">{{ $upload->category->name ?? 'No category' }} • {{ $upload->addedBy->username ?? 'Unknown' }} • {{ $upload->created_at->format('M d, Y h:i A') }}</p>
                                         @if($upload->description)
                                             <p class="text-xs text-slate-400 mt-1 line-clamp-2">{{ $upload->description }}</p>

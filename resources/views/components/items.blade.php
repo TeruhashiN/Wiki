@@ -108,6 +108,9 @@
                                             </div>
                                         @endif
                                         <span class="text-[11px] font-bold text-white truncate">{{ $upload->name }}</span>
+                                        @if($upload->status === 'pending')
+                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse shrink-0" title="Waiting for approval"></span>
+                                        @endif
                                     </a>
                                 @empty
                                     <span class="text-[11px] text-slate-500">No items uploaded yet.</span>

@@ -156,6 +156,12 @@
                                                 <h3 class="font-bold text-white text-sm truncate group-hover:text-indigo-300 transition-colors">{{ $game->name }}</h3>
                                                 <p class="text-xs text-slate-500 mt-0.5">{{ $game->category?->name ?? 'Uncategorized' }}</p>
                                             </div>
+                                            @if($game->status === 'pending')
+                                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider text-amber-300 bg-amber-500/10 border border-amber-500/30 shrink-0">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                                                    Waiting
+                                                </span>
+                                            @endif
                                             @if($game->price)
                                                 <span class="flex items-center gap-1 text-xs font-bold text-emerald-400 shrink-0">
                                                      🪙{{ number_format($game->price, 2) }}
@@ -196,6 +202,12 @@
                                         <span class="block text-sm font-semibold text-white truncate group-hover:text-indigo-300 transition-colors">{{ $t->name }}</span>
                                         <span class="block text-[11px] text-slate-500">{{ $t->category?->name ?? 'Uncategorized' }}</span>
                                     </span>
+                                    @if($t->status === 'pending')
+                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider text-amber-300 bg-amber-500/10 border border-amber-500/30 shrink-0">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                                            Waiting
+                                        </span>
+                                    @endif
                                     @if($t->price)
                                         <span class="flex items-center gap-1 text-xs font-bold text-emerald-400 shrink-0">
                                              🪙{{ number_format($t->price, 2) }}

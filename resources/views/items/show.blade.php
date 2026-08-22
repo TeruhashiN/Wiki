@@ -157,6 +157,9 @@
                                             <li class="flex items-center gap-2 text-xs">
                                                 <span class="w-5 h-5 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-400 shrink-0">{{ $index + 1 }}</span>
                                                 <a href="{{ route('uploads.show', $related->id) }}" class="text-slate-300 hover:text-white transition-colors truncate">{{ $related->name }}</a>
+                                                @if($related->status === 'pending')
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse shrink-0" title="Waiting for approval"></span>
+                                                @endif
                                             </li>
                                         @endforeach
                                     </ul>
